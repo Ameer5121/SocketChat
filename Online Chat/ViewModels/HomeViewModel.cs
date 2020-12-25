@@ -10,6 +10,7 @@ using Online_Chat.Models;
 using Online_Chat.Command;
 using Online_Chat.Server;
 using Online_Chat.Events;
+using Online_Chat.Extensions;
 using System.Net.Http;
 
 namespace Online_Chat.ViewModels
@@ -60,11 +61,10 @@ namespace Online_Chat.ViewModels
             return true;
         }
 
-        private async void Connect()
+        private async Task Connect()
         { 
             try
             {
-                
                  UpdateStatus("Connecting...");
                 _client.ConnectAsync(IPAddress.Parse(_ipaddress), _port);
                 await Task.Delay(5000);
@@ -90,26 +90,19 @@ namespace Online_Chat.ViewModels
               Alert?.Invoke(this, new MessageEventArgs { Message = y.Message });
             }          
         }
-        private async void Host()
+        private async Task Host()
         {
             try
             {
                 _user.IsHosting = true;
                 _listener = new TCPServer(new TcpListener(IPAddress.Any, _port));
-                IP = await GetIP();
+                IP.GetInternallIP();
                 Connect();             
             }
             catch (ArgumentException)
             {
                 Alert.Invoke(this, new MessageEventArgs { Message = "Please type a correct Port address"});
             }
-        }
-
-        private async Task<string> GetIP()
-        {
-            WebClient web = new WebClient();
-            string externalip = await web.DownloadStringTaskAsync("http://icanhazip.com/");
-            return externalip.Substring(0, externalip.Length - 2);
         }
 
         private void UpdateStatus(string status)

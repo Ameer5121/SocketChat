@@ -29,7 +29,7 @@ namespace Online_Chat.ViewModels
             get => _texts;
         }
 
-        public ICommand _send => new RelayCommand(Send, CanSend);
+       // public ICommand _send => new RelayCommand(Send, CanSend);
         
         private bool CanSend()
         {

@@ -57,6 +57,7 @@
     </ApplicationDefinition>
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Events\MessageEventArgs.cs" />
+    <Compile Include="Extensions\IPExtension.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Server\TCPServer.cs" />
     <Page Include="Views\Home.xaml">
