@@ -1,0 +1,51 @@
+﻿<Window x:Class="Online_Chat.Views.MainChat"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Online_Chat.Views"
+        mc:Ignorable="d"
+        Height="620" Width="734" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" MouseDown="Window_MouseDown">
+    <Grid Background="#FF575757">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="29*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="73*"/>
+            <ColumnDefinition Width="294*"/>
+        </Grid.ColumnDefinitions>
+        <Border Background="#FF212020" Margin="0,0,0,578" Grid.ColumnSpan="2" Grid.RowSpan="2">
+            <Button Margin="684,0,0,0" RenderTransformOrigin="1.185,0.522" BorderBrush="Transparent" Cursor="Hand" Click="Exit" Template="{StaticResource CustomizedButton}">
+                <Image Source="/Images/Exit.png" Height="34" Width="30"></Image>
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="Transparent"></Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="Red"></Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Border>
+
+        <RichTextBox Background="#FF424040" Margin="8,533,0,0"  FontSize="20" BorderBrush="Transparent" Grid.Column="1" Grid.Row="1">
+            <FlowDocument>
+                <Paragraph>
+                    Message
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+        <Button Background="Silver" Content="Send" Margin="534,533,0,0" Command="{Binding _send}" Grid.Column="1" Grid.Row="1"></Button>
+
+        <ListBox Background="Silver" Margin="8,1.667,0,47" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Texts}">
+
+        </ListBox>
+
+        <ListView Grid.Column="0" Margin="0,2,0,47" Grid.Row="1" BorderBrush="Black" Background="Silver">
+            <TextBlock Text="Users:" Width="34" TextAlignment="Center" Margin="45,0,0,0"/>
+        </ListView>
+    </Grid>
+</Window>
