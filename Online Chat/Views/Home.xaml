@@ -24,14 +24,16 @@
             </Button>
         </Border>
 
-        <TextBlock Text="Socket Chat" Margin="211,37,239,381" FontSize="15" Foreground="White" TextAlignment="Center"></TextBlock>
+        <TextBlock Text="Socket Chat" Margin="210,4,240,425" FontSize="15" Foreground="White" TextAlignment="Center"></TextBlock>
         <Button Margin="190,250,226,117" Content="Connect" FontSize="15" Foreground="White" Command="{Binding _connect}"></Button>
         <Button Margin="190,345,226,21" Content="Host" FontSize="15" Foreground="White" Command="{Binding _host}"></Button>
-        <TextBlock Text="IP Address" Margin="211,101,239,328" FontSize="15" Foreground="White" TextAlignment="Center"></TextBlock>
-        <TextBox Margin="190,126,226,298" TextAlignment="Center" FontSize="13" Text="{Binding IP}"></TextBox>
-        <TextBlock Text="Port" Margin="238,160,273,269" FontSize="15" Foreground="White" TextAlignment="Center"></TextBlock>
-        <TextBox Margin="190,185,226,239" TextAlignment="Center" FontSize="13" Text="{Binding Port}"></TextBox>
-        <TextBlock Text="{Binding Status}" Foreground="Silver" TextAlignment="Center" Margin="216,215,253,199"></TextBlock>
+        <TextBlock Text="IP Address" Margin="211,101,239,328" FontSize="14" Foreground="White" TextAlignment="Center"></TextBlock>
+        <TextBox Margin="190,130,226,294" TextAlignment="Center" FontSize="13" Text="{Binding IP, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        <TextBlock Text="Port" Margin="238,161,273,268" FontSize="14" Foreground="White" TextAlignment="Center"></TextBlock>
+        <TextBox Margin="190,189,226,235" TextAlignment="Center" FontSize="13" Text="{Binding Port, UpdateSourceTrigger=LostFocus}"></TextBox>
+        <TextBlock Text="{Binding Status}" Foreground="Silver" TextAlignment="Center" Margin="214,222,255,206"></TextBlock>
+        <TextBlock Text="Name" Margin="230,43,261,386" FontSize="14" Foreground="White" TextAlignment="Center"></TextBlock>
+        <TextBox Margin="190,71,226,353" TextAlignment="Center" FontSize="13" Text="{Binding User.Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
 
     </Grid>
 </Window>

@@ -19,7 +19,7 @@ namespace Online_Chat.Views
             InitializeComponent();
             DataContext = new HomeViewModel();
             (DataContext as HomeViewModel).Alert += MessageRequest;
-            (DataContext as HomeViewModel).OnConnectOrHost += ChangeWindow;
+            (DataContext as HomeViewModel).OnConnect += ChangeWindow;
         }
 
         private void Exit(object sender, RoutedEventArgs e)
@@ -29,7 +29,10 @@ namespace Online_Chat.Views
 
         private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            this.DragMove();
+            if (e.ButtonState == e.LeftButton)
+            {
+                this.DragMove();
+            }
         }
 
         private void MessageRequest(object sender, MessageEventArgs e)
@@ -42,6 +45,7 @@ namespace Online_Chat.Views
             MainChat chat = new MainChat(DataContext as HomeViewModel);
             chat.Show();
             this.Hide();
+                     
         }
     }
 }

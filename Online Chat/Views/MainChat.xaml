@@ -44,8 +44,15 @@
 
         </ListBox>
 
-        <ListView Grid.Column="0" Margin="0,2,0,47" Grid.Row="1" BorderBrush="Black" Background="Silver">
-            <TextBlock Text="Users:" Width="34" TextAlignment="Center" Margin="45,0,0,0"/>
+        <TextBlock Text="Users:" Margin="49,3,62,562" Grid.Row="1" TextAlignment="Center"></TextBlock>
+        <ListView Grid.Column="0" Margin="0,23,0,47" Grid.Row="1" BorderBrush="Black" Background="Silver" ItemsSource="{Binding ActiveUsers}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock FontSize="15" Foreground="White" Text="{Binding Name}"></TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
         </ListView>
     </Grid>
 </Window>

@@ -12,6 +12,8 @@ using Online_Chat.Server;
 using Online_Chat.Events;
 using Online_Chat.Extensions;
 using System.Net.Http;
+using Online_Chat.Views;
+using System.Threading;
 
 namespace Online_Chat.ViewModels
 {
@@ -21,14 +23,16 @@ namespace Online_Chat.ViewModels
         private TcpClient _client;
         private TCPServer _listener;
         private string _ipaddress;
-        private int _port;
+        private int _port;        
         private string _status;
+        private bool _isconnecting;
         public event EventHandler<MessageEventArgs> Alert;
-        public event EventHandler OnConnectOrHost;
+        public event EventHandler OnConnect;
         public HomeViewModel()
         {
             _client = new TcpClient();
-            _user = new User();           
+            _user = new User();
+            Port = 5000;
             IP = "0.0.0.0";
         }
 
@@ -38,70 +42,106 @@ namespace Online_Chat.ViewModels
         public string IP
         {
             get => _ipaddress;
-            set => SetPropertyValue(ref _ipaddress, value);
+            set
+            {
+                if (_isconnecting) return;
+               SetPropertyValue(ref _ipaddress, value);
+            }
 
         }
         public int Port
         {
             get => _port;
-            set => SetPropertyValue(ref _port, value);
+            set 
+            {
+                if (value < 5000 || value > 10000 || _isconnecting)
+                    return;
+                    
+                SetPropertyValue(ref _port, value);
+            }
         } 
-        private string Status
+        public string Status
         {
             get => _status;
             set => SetPropertyValue(ref _status, value);
         }
 
         public ICommand _connect => new RelayCommand(Connect, CanConnect);
-        public ICommand _host => new RelayCommand(Host);
+        public ICommand _host => new RelayCommand(Host, CanHost);
 
 
         private bool CanConnect()
         {
-            return true;
+            if (User.Name != null && !_isconnecting)
+                return true;
+
+            return false;
         }
 
         private async Task Connect()
-        { 
+        {
+            UpdateStatus("Connecting...");
+            _isconnecting = true;
             try
             {
-                 UpdateStatus("Connecting...");
-                _client.ConnectAsync(IPAddress.Parse(_ipaddress), _port);
+                 _client.ConnectAsync(IPAddress.Parse(_ipaddress), _port);
                 await Task.Delay(5000);
                 if (!_client.Connected)
                 {
                     Alert?.Invoke(this, new MessageEventArgs { Message = "The remote server does not exist!" });
                     UpdateStatus(default);
+                    _isconnecting = false;
                     return;
-                }
-                OnConnectOrHost?.Invoke(this, EventArgs.Empty);
-
+                }             
             }
             catch (FormatException)
             {
                Alert?.Invoke(this, new MessageEventArgs { Message = "Please type a correct IP/Port address!" });
+               UpdateStatus(default);
+               _isconnecting = false;
             }
             catch (ArgumentException x)
             {
               Alert?.Invoke(this, new MessageEventArgs { Message = x.Message });
+              UpdateStatus(default);
+              _isconnecting = false;
             }
             catch (SocketException y)
             {
               Alert?.Invoke(this, new MessageEventArgs { Message = y.Message });
-            }          
-        }
-        private async Task Host()
-        {
-            try
-            {
-                _user.IsHosting = true;
-                _listener = new TCPServer(new TcpListener(IPAddress.Any, _port));
-                IP.GetInternallIP();
-                Connect();             
+              UpdateStatus(default);
+              _isconnecting = false;
             }
-            catch (ArgumentException)
+
+            SendUser();
+            OnConnect?.Invoke(this, EventArgs.Empty);
+        }
+
+        private bool CanHost()
+        {
+            if (User.Name != null && _isconnecting == false)
+                return true;
+
+            return false; 
+        }
+
+        private void Host()
+        {
+            _listener = new TCPServer(new TcpListener(IPAddress.Any, _port));          
+            _user.IsHosting = true;
+            IP = IP.GetInternallIP();
+            Connect();
+        }
+
+        /// <summary>
+        ///  Sends the current user to the server
+        /// </summary>
+        private void SendUser()
+        {
+            using (NetworkStream stream = _client.GetStream())
             {
-                Alert.Invoke(this, new MessageEventArgs { Message = "Please type a correct Port address"});
+                byte[] data = Encoding.ASCII.GetBytes(_user.Name);
+                stream.Write(data, 0, data.Length);
             }
         }
 
@@ -109,6 +149,5 @@ namespace Online_Chat.ViewModels
         {
             Status = status;
         }
-
     }
 }
