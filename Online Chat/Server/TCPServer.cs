@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Collections.ObjectModel;
 
 namespace Online_Chat.Server
 {
@@ -26,7 +27,7 @@ namespace Online_Chat.Server
             Listen();
         }
 
-        private void Listen()
+        private async Task Listen()
         {
             _listentask = new Task(async () => 
             {  
@@ -38,14 +39,15 @@ namespace Online_Chat.Server
                     ReadActiveUsers();
                 }
             });
+            _listentask.Start();
         }
 
         private void ReadActiveUsers()
         {
-            List<string> users = new List<string>();
+            ObservableCollection<string> users = new ObservableCollection<string>();
             foreach(var Client in _clients)
             {
-                using (NetworkStream stream = Client.GetStream())
+                using (NetworkStream stream = new NetworkStream(Client.Client, false))
                 {
                     byte[] userName = new byte[256];
                     stream.Read(userName, 0, userName.Length);
@@ -54,12 +56,12 @@ namespace Online_Chat.Server
             }
             BroadCastActiveUsers(users);            
         }
-        private void BroadCastActiveUsers(IEnumerable<string> usersToBroadcast)
+        private void BroadCastActiveUsers(ObservableCollection<string> usersToBroadcast)
         {
             BinaryFormatter bf = new BinaryFormatter();
             foreach (var Client in _clients)
             {
-                using (NetworkStream stream = Client.GetStream())
+                using (NetworkStream stream = new NetworkStream(Client.Client, false))
                 {
                     bf.Serialize(stream, usersToBroadcast);
                 }

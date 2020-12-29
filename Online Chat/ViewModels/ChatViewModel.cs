@@ -14,10 +14,10 @@ using System.Threading;
 
 namespace Online_Chat.ViewModels
 {
-    class ChatViewModel
+    class ChatViewModel : ViewModelBase
     {
         private ObservableCollection<string> _texts;
-        private ObservableCollection<User> _activeusers;
+        private ObservableCollection<string> _activeusers;
         private TcpClient _client;
         private User _user;
 
@@ -26,15 +26,15 @@ namespace Online_Chat.ViewModels
             _user = user;
             _client = client;
             _texts = new ObservableCollection<string>();
-            _activeusers = new ObservableCollection<User>();
-            ReceiveUsers();
+            _activeusers = ReceiveUsers();
         }
 
         public ObservableCollection<string> Texts => _texts;
 
-        public ObservableCollection<User> ActiveUsers
+        public ObservableCollection<string> ActiveUsers
         {
             get => _activeusers;
+            set => SetPropertyValue(ref _activeusers, value);
         }
 
          public ICommand _send => new RelayCommand(SendMessage, CanSend);
@@ -46,24 +46,24 @@ namespace Online_Chat.ViewModels
 
         private void SendMessage()
         {
-            using (NetworkStream stream = _client.GetStream())
+            using (NetworkStream stream = new NetworkStream(_client.Client, false))
             {
                 
             }
         }     
 
         /// <summary>
-        /// Recieves users from the server
+        /// Recieves users from the server when logged in
         /// </summary>
         /// <param name="Users"></param>
-        private void ReceiveUsers()
-        {
+        private ObservableCollection<string> ReceiveUsers()
+        {           
             BinaryFormatter bf = new BinaryFormatter();
-            IEnumerable<string> usersToReceive;
-            using (NetworkStream stream = _client.GetStream())
+            using (NetworkStream stream = new NetworkStream(_client.Client, false))
             {
-                usersToReceive = (List<string>)bf.Deserialize(stream);
+                return (ObservableCollection<string>)bf.Deserialize(stream);
             }
+            
         }
     }
 }

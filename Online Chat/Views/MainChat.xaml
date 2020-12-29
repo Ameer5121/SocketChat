@@ -49,7 +49,8 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
-                        <TextBlock FontSize="15" Foreground="White" Text="{Binding Name}"></TextBlock>
+                        <TextBlock FontSize="15" Foreground="ForestGreen" Text="{Binding}"></TextBlock>
+                        <TextBlock FontSize="15" Foreground="ForestGreen" Text=""></TextBlock>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

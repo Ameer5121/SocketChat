@@ -14,6 +14,7 @@ using Online_Chat.Extensions;
 using System.Net.Http;
 using Online_Chat.Views;
 using System.Threading;
+using System.Runtime.Serialization;
 
 namespace Online_Chat.ViewModels
 {
@@ -80,11 +81,11 @@ namespace Online_Chat.ViewModels
 
         private async Task Connect()
         {
-            UpdateStatus("Connecting...");
-            _isconnecting = true;
             try
             {
-                 _client.ConnectAsync(IPAddress.Parse(_ipaddress), _port);
+                UpdateStatus("Connecting...");
+                _isconnecting = true;
+                _client.ConnectAsync(IPAddress.Parse(_ipaddress), _port);         
                 await Task.Delay(5000);
                 if (!_client.Connected)
                 {
@@ -92,7 +93,9 @@ namespace Online_Chat.ViewModels
                     UpdateStatus(default);
                     _isconnecting = false;
                     return;
-                }             
+                }
+                SendUser();
+                OnConnect?.Invoke(this, EventArgs.Empty);
             }
             catch (FormatException)
             {
@@ -112,9 +115,13 @@ namespace Online_Chat.ViewModels
               UpdateStatus(default);
               _isconnecting = false;
             }
+            catch (Exception z)
+            {
+                Alert?.Invoke(this, new MessageEventArgs { Message = z.Message });
+                UpdateStatus(default);
+                _isconnecting = false;
+            }
 
-            SendUser();
-            OnConnect?.Invoke(this, EventArgs.Empty);
         }
 
         private bool CanHost()
@@ -133,12 +140,14 @@ namespace Online_Chat.ViewModels
             Connect();
         }
 
+ 
+
         /// <summary>
         ///  Sends the current user to the server
         /// </summary>
         private void SendUser()
         {
-            using (NetworkStream stream = _client.GetStream())
+            using (NetworkStream stream = new NetworkStream(_client.Client, false))
             {
                 byte[] data = Encoding.ASCII.GetBytes(_user.Name);
                 stream.Write(data, 0, data.Length);
@@ -149,5 +158,6 @@ namespace Online_Chat.ViewModels
         {
             Status = status;
         }
+
     }
 }
