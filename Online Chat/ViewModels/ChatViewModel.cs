@@ -11,7 +11,7 @@ using Online_Chat.Server;
 using Online_Chat.Events;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
-
+using System.Threading.Tasks;
 namespace Online_Chat.ViewModels
 {
     class ChatViewModel : ViewModelBase
@@ -26,7 +26,7 @@ namespace Online_Chat.ViewModels
             _user = user;
             _client = client;
             _texts = new ObservableCollection<string>();
-            _activeusers = ReceiveUsers();
+            QueryUsers();
         }
 
         public ObservableCollection<string> Texts => _texts;
@@ -52,18 +52,21 @@ namespace Online_Chat.ViewModels
             }
         }     
 
+        private async Task QueryUsers()
+        {
+           _activeusers = await Task.Run(ReceiveUsers);
+        }
         /// <summary>
         /// Recieves users from the server when logged in
         /// </summary>
         /// <param name="Users"></param>
-        private ObservableCollection<string> ReceiveUsers()
-        {           
+        private Task<ObservableCollection<string>> ReceiveUsers()
+        {
             BinaryFormatter bf = new BinaryFormatter();
             using (NetworkStream stream = new NetworkStream(_client.Client, false))
             {
-                return (ObservableCollection<string>)bf.Deserialize(stream);
+              return Task.FromResult((ObservableCollection<string>)bf.Deserialize(stream));
             }
-            
         }
     }
 }

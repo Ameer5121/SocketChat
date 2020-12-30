@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Net;
@@ -15,6 +15,8 @@ using System.Net.Http;
 using Online_Chat.Views;
 using System.Threading;
 using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+
 
 namespace Online_Chat.ViewModels
 {
@@ -83,10 +85,10 @@ namespace Online_Chat.ViewModels
         {
             try
             {
+                
                 UpdateStatus("Connecting...");
                 _isconnecting = true;
-                _client.ConnectAsync(IPAddress.Parse(_ipaddress), _port);         
-                await Task.Delay(5000);
+                await Task.WhenAny(Task.Delay(5000), _client.ConnectAsync(IPAddress.Parse(_ipaddress), _port));
                 if (!_client.Connected)
                 {
                     Alert?.Invoke(this, new MessageEventArgs { Message = "The remote server does not exist!" });
@@ -94,7 +96,7 @@ namespace Online_Chat.ViewModels
                     _isconnecting = false;
                     return;
                 }
-                SendUser();
+                await Task.Run(SendUser);
                 OnConnect?.Invoke(this, EventArgs.Empty);
             }
             catch (FormatException)
@@ -115,12 +117,6 @@ namespace Online_Chat.ViewModels
               UpdateStatus(default);
               _isconnecting = false;
             }
-            catch (Exception z)
-            {
-                Alert?.Invoke(this, new MessageEventArgs { Message = z.Message });
-                UpdateStatus(default);
-                _isconnecting = false;
-            }
 
         }
 
@@ -140,18 +136,16 @@ namespace Online_Chat.ViewModels
             Connect();
         }
 
- 
-
         /// <summary>
         ///  Sends the current user to the server
         /// </summary>
         private void SendUser()
         {
-            using (NetworkStream stream = new NetworkStream(_client.Client, false))
-            {
-                byte[] data = Encoding.ASCII.GetBytes(_user.Name);
-                stream.Write(data, 0, data.Length);
-            }
+           using (NetworkStream stream = new NetworkStream(_client.Client, false))
+           {
+             byte[] data = Encoding.ASCII.GetBytes(_user.Name);
+             stream.Write(data, 0, data.Length);
+           }   
         }
 
         private void UpdateStatus(string status)

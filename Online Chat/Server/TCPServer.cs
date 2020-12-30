@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace Online_Chat.Server
 {
@@ -27,7 +28,7 @@ namespace Online_Chat.Server
             Listen();
         }
 
-        private async Task Listen()
+        private void Listen()
         {
             _listentask = new Task(async () => 
             {  
@@ -36,7 +37,7 @@ namespace Online_Chat.Server
                     TcpClient client = _server.AcceptTcpClient();
                     _clients.Add(client);
                     await Task.Delay(2000);
-                    ReadActiveUsers();
+                    Task.Run(ReadActiveUsers);
                 }
             });
             _listentask.Start();
@@ -58,19 +59,18 @@ namespace Online_Chat.Server
         }
         private void BroadCastActiveUsers(ObservableCollection<string> usersToBroadcast)
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            foreach (var Client in _clients)
+            Task.Run(() =>
             {
-                using (NetworkStream stream = new NetworkStream(Client.Client, false))
+                BinaryFormatter bf = new BinaryFormatter();
+                foreach (var Client in _clients)
                 {
-                    bf.Serialize(stream, usersToBroadcast);
+                    using (NetworkStream stream = new NetworkStream(Client.Client, false))
+                    {
+                        bf.Serialize(stream, usersToBroadcast);
+                    }
                 }
-            }
+            });     
 
-        }
-        ~TCPServer()
-        {
-            System.Windows.MessageBox.Show("Disposed of the server");
         }
     }
 }
