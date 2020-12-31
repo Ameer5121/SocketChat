@@ -69,7 +69,7 @@ namespace Online_Chat.ViewModels
             set => SetPropertyValue(ref _status, value);
         }
 
-        public ICommand _connect => new RelayCommand(Connect, CanConnect);
+        public ICommand _connect => new RelayCommand(ConnectAsync, CanConnect);
         public ICommand _host => new RelayCommand(Host, CanHost);
 
 
@@ -81,7 +81,7 @@ namespace Online_Chat.ViewModels
             return false;
         }
 
-        private async Task Connect()
+        private async Task ConnectAsync()
         {
             try
             {
@@ -133,7 +133,7 @@ namespace Online_Chat.ViewModels
             _listener = new TCPServer(new TcpListener(IPAddress.Any, _port));          
             _user.IsHosting = true;
             IP = IP.GetInternallIP();
-            Connect();
+            ConnectAsync();
         }
 
         /// <summary>

@@ -44,8 +44,7 @@ namespace Online_Chat.Views
         {
             MainChat chat = new MainChat(DataContext as HomeViewModel);
             chat.Show();
-            this.Hide();
-                     
+            this.Hide();                    
         }
     }
 }

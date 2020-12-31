@@ -25,10 +25,10 @@ namespace Online_Chat.Server
             _data = new byte[256];
             _server = listener;
             _server.Start();
-            Listen();
+            ListenAsync();
         }
 
-        private void Listen()
+        private void ListenAsync()
         {
             _listentask = new Task(async () => 
             {  

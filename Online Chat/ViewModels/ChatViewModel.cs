@@ -26,7 +26,7 @@ namespace Online_Chat.ViewModels
             _user = user;
             _client = client;
             _texts = new ObservableCollection<string>();
-            QueryUsers();
+            InitializeUsersAsync();
         }
 
         public ObservableCollection<string> Texts => _texts;
@@ -52,9 +52,9 @@ namespace Online_Chat.ViewModels
             }
         }     
 
-        private async Task QueryUsers()
+        private async Task InitializeUsersAsync()
         {
-           _activeusers = await Task.Run(ReceiveUsers);
+           ActiveUsers = await Task.Run(ReceiveUsers);
         }
         /// <summary>
         /// Recieves users from the server when logged in
