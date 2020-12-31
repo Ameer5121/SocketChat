@@ -40,7 +40,7 @@ namespace Online_Chat.Views
             MessageBox.Show(e.Message);
         }
 
-        private void ChangeWindow(object sender, EventArgs e)
+        private async void ChangeWindow(object sender, EventArgs e)
         {
             MainChat chat = new MainChat(DataContext as HomeViewModel);
             chat.Show();

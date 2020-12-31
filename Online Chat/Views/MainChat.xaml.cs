@@ -25,7 +25,10 @@ namespace Online_Chat.Views
 
         private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            this.DragMove();
+            if (e.ButtonState == e.LeftButton)
+            {
+                this.DragMove();
+            }
         }
 
         private void MessageRequest(object sender, MessageEventArgs e)
