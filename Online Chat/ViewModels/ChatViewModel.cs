@@ -17,8 +17,8 @@ namespace Online_Chat.ViewModels
 {
     class ChatViewModel : ViewModelBase
     {
-        private ObservableCollection<string> _texts;
-        private ObservableCollection<string> _activeusers;
+        private ObservableCollection<Message> _texts;
+        private ObservableCollection<User> _activeusers;
         private TcpClient _client;
         private User _user;
         public event EventHandler OnInitialize;
@@ -27,13 +27,17 @@ namespace Online_Chat.ViewModels
         {
             _user = user;
             _client = client;
-            _texts = new ObservableCollection<string>();
+            _texts = new ObservableCollection<Message>();
             InitializeUsersAsync();
         }
 
-        public ObservableCollection<string> Texts => _texts;
+        public ObservableCollection<Message> Texts
+        {
+           get => _texts;
+           set => SetPropertyValue(ref _texts, value);
+        }
 
-        public ObservableCollection<string> ActiveUsers
+        public ObservableCollection<User> ActiveUsers
         {
             get => _activeusers;
             set => SetPropertyValue(ref _activeusers, value);
@@ -64,12 +68,12 @@ namespace Online_Chat.ViewModels
         /// Recieves users from the server when logged in
         /// </summary>
         /// <param name="Users"></param>
-        private Task<ObservableCollection<string>> ReceiveUsers()
+        private Task<ObservableCollection<User>> ReceiveUsers()
         {
             BinaryFormatter bf = new BinaryFormatter();
             using (NetworkStream stream = new NetworkStream(_client.Client, false))
             {
-                return Task.FromResult((ObservableCollection<string>)bf.Deserialize(stream));
+                return Task.FromResult((ObservableCollection<User>)bf.Deserialize(stream));
             }
         }
     }

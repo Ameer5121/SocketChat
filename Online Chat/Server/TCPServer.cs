@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.ObjectModel;
+using Online_Chat.Models;
 using System.Threading.Tasks;
 
 namespace Online_Chat.Server
@@ -45,19 +46,18 @@ namespace Online_Chat.Server
 
         private void ReadActiveUsers()
         {
-            ObservableCollection<string> users = new ObservableCollection<string>();
-            foreach(var Client in _clients)
+            ObservableCollection<User> users = new ObservableCollection<User>();
+            BinaryFormatter bf = new BinaryFormatter();
+            foreach (var Client in _clients)
             {
                 using (NetworkStream stream = new NetworkStream(Client.Client, false))
                 {
-                    byte[] userName = new byte[256];
-                    stream.Read(userName, 0, userName.Length);
-                    users.Add(Encoding.ASCII.GetString(userName));                  
+                    users.Add((User)bf.Deserialize(stream));               
                 }
             }
             BroadCastActiveUsers(users);            
         }
-        private void BroadCastActiveUsers(ObservableCollection<string> usersToBroadcast)
+        private void BroadCastActiveUsers(ObservableCollection<User> usersToBroadcast)
         {
             Task.Run(() =>
             {

@@ -84,8 +84,7 @@ namespace Online_Chat.ViewModels
         private async Task ConnectAsync()
         {
             try
-            {
-                
+            {            
                 UpdateStatus("Connecting...");
                 _isconnecting = true;
                 await Task.WhenAny(Task.Delay(5000), _client.ConnectAsync(IPAddress.Parse(_ipaddress), _port));
@@ -141,11 +140,11 @@ namespace Online_Chat.ViewModels
         /// </summary>
         private void SendUser()
         {
-           using (NetworkStream stream = new NetworkStream(_client.Client, false))
-           {
-             byte[] data = Encoding.ASCII.GetBytes(_user.Name);
-             stream.Write(data, 0, data.Length);
-           }   
+            BinaryFormatter bf = new BinaryFormatter();
+            using (NetworkStream stream = new NetworkStream(_client.Client, false))
+            {
+                bf.Serialize(stream, _user);
+            }   
         }
 
         private void UpdateStatus(string status)

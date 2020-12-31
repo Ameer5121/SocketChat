@@ -9,7 +9,8 @@ using Online_Chat.ViewModels;
 
 namespace Online_Chat.Models
 {
-    public class User : ViewModelBase
+    [Serializable]
+    public class User
     {
         private string _name;
         private bool _ishosting;
@@ -17,12 +18,12 @@ namespace Online_Chat.Models
         public string Name
         {
             get => _name;
-            set => SetPropertyValue(ref _name, value);
+            set => _name = value;
         }
         public bool IsHosting
         {
             get => _ishosting;
-            set => SetPropertyValue(ref _ishosting, value);
+            set => _ishosting = value;
         }
     }
 }

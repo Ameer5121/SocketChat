@@ -1,0 +1,72 @@
+[33mcommit 93f0cf7aae2b16551d5701df491b7ecd7a524a83[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: Sound932 <shehadyamer@gmail.com>
+Date:   Thu Dec 31 20:43:10 2020 +0200
+
+    Added a message model class for sending and receving messages.  User model class gets serialized when receiving or sending active users.
+
+[33mcommit 5eb6e65b1837d4980c31e61e53b5b2000e888866[m[33m ([m[1;31morigin/main[m[33m)[m
+Merge: 726beb5 c10232f
+Author: Sound932 <shehadyamer@gmail.com>
+Date:   Thu Dec 31 19:12:35 2020 +0200
+
+    Merge remote-tracking branch 'origin/main' into main
+
+[33mcommit 726beb5d6c3b01df7c565df070018376da22ee43[m
+Author: Sound932 <shehadyamer@gmail.com>
+Date:   Thu Dec 31 19:09:25 2020 +0200
+
+    Refactored and renamed async methods
+
+[33mcommit e87b31e42df45a2ecf3ce1c4e879a2589cf7de67[m
+Author: Sound932 <shehadyamer@gmail.com>
+Date:   Thu Dec 31 02:58:33 2020 +0200
+
+    Renamed async methods
+
+[33mcommit 9953aad2710d75123419b5c45926630fdf69d7f5[m
+Author: Sound932 <shehadyamer@gmail.com>
+Date:   Thu Dec 31 00:43:07 2020 +0200
+
+    Refactored and moved unrelated UI code to a background worker
+
+[33mcommit e01e9c78e9e8f510bc40a99057a9c5db74569af2[m
+Author: Sound932 <shehadyamer@gmail.com>
+Date:   Tue Dec 29 21:38:58 2020 +0200
+
+    Server now broadcasts users that login to other users
+
+[33mcommit 3f21475d28c2c79648f4502563161317669d9b64[m
+Author: Sound932 <shehadyamer@gmail.com>
+Date:   Mon Dec 28 20:24:17 2020 +0200
+
+    Added a way to provide your name before connecting, and the server can now broadcast all active users
+
+[33mcommit dc40efb39fda9403f40907bc8a1c22010a213eb8[m
+Author: Sound932 <shehadyamer@gmail.com>
+Date:   Sat Dec 26 01:46:31 2020 +0200
+
+    Added extension methods for getting the External IP and the Internal IP
+
+[33mcommit c10232f2c0e6b04c02cbf18d473440b6bebb672b[m
+Author: Amer Shehady <71935713+Sound932@users.noreply.github.com>
+Date:   Fri Dec 25 23:40:22 2020 +0200
+
+    Delete Server.csproj
+
+[33mcommit 85e5d24e0806cf5bd4258dbaee1b856bd20cfc53[m
+Author: Amer Shehady <71935713+Sound932@users.noreply.github.com>
+Date:   Fri Dec 25 23:40:16 2020 +0200
+
+    Delete Program.cs
+
+[33mcommit ee4f3c91c4c4e100f4ae8d7c657c48857d5a8bbc[m
+Author: Sound932 <shehadyamer@gmail.com>
+Date:   Fri Dec 25 23:29:38 2020 +0200
+
+    Initial commit
+
+[33mcommit 8efb5faf5760963a8e510ca172832b30fd336b6f[m
+Author: Amer Shehady <71935713+Sound932@users.noreply.github.com>
+Date:   Fri Dec 25 23:22:24 2020 +0200
+
+    Initial commit
