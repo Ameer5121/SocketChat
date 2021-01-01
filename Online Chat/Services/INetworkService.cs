@@ -8,7 +8,7 @@ using System.Net;
 
 namespace Online_Chat.Services
 {
-    interface INetworkService
+    public interface INetworkService
     {
         Task<ObservableCollection<Message>> ReceiveMessages();
         Task<ObservableCollection<User>> ReceiveUsers(TcpClient client);

@@ -13,10 +13,11 @@ namespace Online_Chat.Views
     /// </summary>
     public partial class MainChat : Window
     {
-        public MainChat(HomeViewModel Home)
+        public MainChat(ChatViewModel mainchat)
         {
             InitializeComponent();
-            DataContext = new ChatViewModel(Home.Client, Home.User);
+            DataContext = mainchat;
+            this.Show();
         }
         private void Exit(object sender, RoutedEventArgs e)
         {

@@ -11,6 +11,7 @@ using Online_Chat.Command;
 using Online_Chat.Server;
 using Online_Chat.Events;
 using Online_Chat.Extensions;
+using Online_Chat.Services;
 using System.Net.Http;
 using Online_Chat.Views;
 using System.Threading;
@@ -30,7 +31,7 @@ namespace Online_Chat.ViewModels
         private string _status;
         private bool _isconnecting;
         public event EventHandler<MessageEventArgs> Alert;
-        public event EventHandler OnConnect;
+        public event EventHandler<ConnectEventArgs> OnConnect;
         public HomeViewModel()
         {
             _client = new TcpClient();
@@ -87,6 +88,7 @@ namespace Online_Chat.ViewModels
             {            
                 UpdateStatus("Connecting...");
                 _isconnecting = true;
+
                 await Task.WhenAny(Task.Delay(5000), _client.ConnectAsync(IPAddress.Parse(_ipaddress), _port));
                 if (!_client.Connected)
                 {
@@ -96,7 +98,7 @@ namespace Online_Chat.ViewModels
                     return;
                 }
                 await Task.Run(SendUser);
-                OnConnect?.Invoke(this, EventArgs.Empty);
+                OnConnect?.Invoke(this, new ConnectEventArgs { ChatVM = await ConstructChatAsync(new NetworkService()) });
             }
             catch (FormatException)
             {
@@ -145,6 +147,18 @@ namespace Online_Chat.ViewModels
             {
                 bf.Serialize(stream, _user);
             }   
+        }
+
+        /// <summary>
+        /// If connection is successful, the Chat window will be constructed
+        /// </summary>
+        /// <param name="networkservice"></param>
+        /// <returns></returns>
+        private async Task<ChatViewModel> ConstructChatAsync(INetworkService networkservice)
+        {
+            var ChatVM = new ChatViewModel(_client, _user, networkservice);
+            ChatVM.ActiveUsers = await networkservice.ReceiveUsers(_client);
+            return ChatVM;
         }
 
         private void UpdateStatus(string status)

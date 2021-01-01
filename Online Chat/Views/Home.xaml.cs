@@ -40,14 +40,11 @@ namespace Online_Chat.Views
             MessageBox.Show(e.Message);
         }
 
-        private void InitializeChatWindow(object sender, EventArgs e)
+        private void InitializeChatWindow(object sender, ConnectEventArgs e)
         {
-            MainChat chat = new MainChat(DataContext as HomeViewModel);
-        }
-
-        private void HideHomeWindow(object sender, EventArgs e)
-        {
+            MainChat chat = new MainChat(e.ChatVM);
             this.Hide();
         }
+
     }
 }

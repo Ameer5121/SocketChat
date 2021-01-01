@@ -17,16 +17,21 @@ namespace Online_Chat.Services
 
         public Task<ObservableCollection<Message>> ReceiveMessages()
         {
+            // TODO
             throw new NotImplementedException();
         }
 
-        public Task<ObservableCollection<User>> ReceiveUsers(TcpClient client)
+        public async Task<ObservableCollection<User>> ReceiveUsers(TcpClient client)
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            using (NetworkStream stream = new NetworkStream(client.Client, false))
-            {
-                return Task.FromResult((ObservableCollection<User>)bf.Deserialize(stream));
-            }
+            return await Task.Run(() =>
+             {
+                 BinaryFormatter bf = new BinaryFormatter();
+                 using (NetworkStream stream = new NetworkStream(client.Client, false))
+                 {
+                     return Task.FromResult((ObservableCollection<User>)bf.Deserialize(stream));
+                 }
+             });
+            
         }
     }
 }

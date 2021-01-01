@@ -13,20 +13,23 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Threading.Tasks;
 using Online_Chat.Extensions;
+using Online_Chat.Services;
 namespace Online_Chat.ViewModels
 {
-    class ChatViewModel : ViewModelBase
+    public class ChatViewModel : ViewModelBase
     {
         private ObservableCollection<Message> _texts;
         private ObservableCollection<User> _activeusers;
         private TcpClient _client;
         private User _currentuser;
+        private INetworkService _networkservice;
 
-        public ChatViewModel(TcpClient client, User user)
+        public ChatViewModel(TcpClient client, User user, INetworkService networkservice)
         {
             _currentuser = user;
             _client = client;
             _texts = new ObservableCollection<Message>();
+            _networkservice = networkservice;
         }
 
         public ObservableCollection<Message> Texts
