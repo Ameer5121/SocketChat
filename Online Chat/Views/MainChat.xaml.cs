@@ -35,5 +35,10 @@ namespace Online_Chat.Views
         {
             MessageBox.Show(e.Message);
         }
+
+        private void ShowChat(object sender, EventArgs e)
+        {
+            this.Show();
+        }
     }
 }

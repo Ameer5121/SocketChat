@@ -19,7 +19,7 @@ namespace Online_Chat.Views
             InitializeComponent();
             DataContext = new HomeViewModel();
             (DataContext as HomeViewModel).Alert += MessageRequest;
-            (DataContext as HomeViewModel).OnConnect += ChangeWindow;
+            (DataContext as HomeViewModel).OnConnect += InitializeChatWindow;
         }
 
         private void Exit(object sender, RoutedEventArgs e)
@@ -40,11 +40,14 @@ namespace Online_Chat.Views
             MessageBox.Show(e.Message);
         }
 
-        private async void ChangeWindow(object sender, EventArgs e)
+        private void InitializeChatWindow(object sender, EventArgs e)
         {
             MainChat chat = new MainChat(DataContext as HomeViewModel);
-            chat.Show();
-            this.Hide();                    
+        }
+
+        private void HideHomeWindow(object sender, EventArgs e)
+        {
+            this.Hide();
         }
     }
 }

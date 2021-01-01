@@ -20,15 +20,13 @@ namespace Online_Chat.ViewModels
         private ObservableCollection<Message> _texts;
         private ObservableCollection<User> _activeusers;
         private TcpClient _client;
-        private User _user;
-        public event EventHandler OnInitialize;
+        private User _currentuser;
 
         public ChatViewModel(TcpClient client, User user)
         {
-            _user = user;
+            _currentuser = user;
             _client = client;
             _texts = new ObservableCollection<Message>();
-            InitializeUsersAsync();
         }
 
         public ObservableCollection<Message> Texts
@@ -57,24 +55,5 @@ namespace Online_Chat.ViewModels
                 
             }
         }     
-
-        private async Task InitializeUsersAsync()
-        {
-            ActiveUsers = await Task.Run(ReceiveUsers);
-            OnInitialize?.Invoke(this, EventArgs.Empty);
-        }
-
-        /// <summary>
-        /// Recieves users from the server when logged in
-        /// </summary>
-        /// <param name="Users"></param>
-        private Task<ObservableCollection<User>> ReceiveUsers()
-        {
-            BinaryFormatter bf = new BinaryFormatter();
-            using (NetworkStream stream = new NetworkStream(_client.Client, false))
-            {
-                return Task.FromResult((ObservableCollection<User>)bf.Deserialize(stream));
-            }
-        }
     }
 }
