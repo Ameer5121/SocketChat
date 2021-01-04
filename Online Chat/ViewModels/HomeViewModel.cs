@@ -88,7 +88,6 @@ namespace Online_Chat.ViewModels
             {            
                 UpdateStatus("Connecting...");
                 _isconnecting = true;
-
                 await Task.WhenAny(Task.Delay(5000), _client.ConnectAsync(IPAddress.Parse(_ipaddress), _port));
                 if (!_client.Connected)
                 {
@@ -118,7 +117,6 @@ namespace Online_Chat.ViewModels
               UpdateStatus(default);
               _isconnecting = false;
             }
-
         }
 
         private bool CanHost()
@@ -138,7 +136,7 @@ namespace Online_Chat.ViewModels
         }
 
         /// <summary>
-        ///  Sends the current user to the server
+        ///  Sends the current user to the server on a successful connect
         /// </summary>
         private void SendUser()
         {
@@ -146,10 +144,10 @@ namespace Online_Chat.ViewModels
             using (NetworkStream stream = new NetworkStream(_client.Client, false))
             {
                 bf.Serialize(stream, _user);
-            }   
+            }
         }
 
-        /// <summary>
+        /// <summary>s
         /// If connection is successful, the Chat window will be constructed
         /// </summary>
         /// <param name="networkservice"></param>
@@ -157,7 +155,7 @@ namespace Online_Chat.ViewModels
         private async Task<ChatViewModel> ConstructChatAsync(INetworkService networkservice)
         {
             var ChatVM = new ChatViewModel(_client, _user, networkservice);
-            ChatVM.ActiveUsers = await networkservice.ReceiveUsers(_client);
+           ChatVM.ActiveUsers = await networkservice.ReceiveUsers(_client);
             return ChatVM;
         }
 

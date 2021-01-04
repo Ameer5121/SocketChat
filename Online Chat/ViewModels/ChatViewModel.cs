@@ -11,6 +11,7 @@ using Online_Chat.Server;
 using Online_Chat.Events;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
+using System.Windows.Threading;
 using System.Threading.Tasks;
 using Online_Chat.Extensions;
 using Online_Chat.Services;
@@ -23,6 +24,7 @@ namespace Online_Chat.ViewModels
         private TcpClient _client;
         private User _currentuser;
         private INetworkService _networkservice;
+        private DispatcherTimer _updateactiveusers;
 
         public ChatViewModel(TcpClient client, User user, INetworkService networkservice)
         {
@@ -30,6 +32,10 @@ namespace Online_Chat.ViewModels
             _client = client;
             _texts = new ObservableCollection<Message>();
             _networkservice = networkservice;
+            _updateactiveusers = new DispatcherTimer();
+            _updateactiveusers.Tick += RequestUsers;
+            _updateactiveusers.Interval = TimeSpan.FromSeconds(10);
+            _updateactiveusers.Start();
         }
 
         public ObservableCollection<Message> Texts
@@ -57,6 +63,14 @@ namespace Online_Chat.ViewModels
             {
                 
             }
-        }     
+        }   
+        
+        // asnyc void because of DispatcherTimer
+        private async void RequestUsers(object sender, EventArgs e) 
+        {
+            _updateactiveusers.Stop();
+            ActiveUsers = await _networkservice.ReceiveUsers(_client);
+            _updateactiveusers.Start();
+        }
     }
 }
