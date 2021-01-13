@@ -26,16 +26,16 @@ namespace Online_Chat.ViewModels
         private INetworkService _networkservice;
         private DispatcherTimer _updateactiveusers;
 
-        public ChatViewModel(TcpClient client, User user, INetworkService networkservice)
+        public ChatViewModel(TcpClient client, User user, INetworkService networkService)
         {
             _currentuser = user;
             _client = client;
             _texts = new ObservableCollection<Message>();
-            _networkservice = networkservice;
+            _networkservice = networkService;
             _updateactiveusers = new DispatcherTimer();
             _updateactiveusers.Tick += RequestUsers;
-            _updateactiveusers.Interval = TimeSpan.FromSeconds(10);
-            _updateactiveusers.Start();
+            _updateactiveusers.Interval = TimeSpan.FromSeconds(1);
+           _updateactiveusers.Start();
         }
 
         public ObservableCollection<Message> Texts
@@ -50,7 +50,8 @@ namespace Online_Chat.ViewModels
             set => SetPropertyValue(ref _activeusers, value);
         }
 
-         public ICommand _send => new RelayCommand(SendMessage, CanSend);
+         public ICommand Send => new RelayCommand(SendMessage, CanSend);
+         
 
         private bool CanSend()
         {
@@ -69,7 +70,7 @@ namespace Online_Chat.ViewModels
         private async void RequestUsers(object sender, EventArgs e) 
         {
             _updateactiveusers.Stop();
-            ActiveUsers = await _networkservice.ReceiveUsers(_client);
+            ActiveUsers = await _networkservice.ReceiveUsersAsync(_client);
             _updateactiveusers.Start();
         }
     }

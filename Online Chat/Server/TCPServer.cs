@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,43 +7,78 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Windows.Threading;
 using System.Runtime.Serialization.Formatters.Binary;
 using Online_Chat.ViewModels;
-using System.Collections.ObjectModel;
 using Online_Chat.Models;
-using System.Threading.Tasks;
+using Online_Chat.Extensions;
+using System.Collections.ObjectModel;
+
 
 namespace Online_Chat.Server
 {
     public class TCPServer
     {
         private TcpListener _server;
-        private List<TcpClient> _clients;
-        private ObservableCollection<User> users;
-        private Task _listentask;
+        private  List<TcpClient> _clients;
+        private ObservableCollection<User> _users;
+        private DispatcherTimer _checkforinactiveusers;
 
         public TcpListener Server => _server;
         public TCPServer(TcpListener listener)
         {
             _clients = new List<TcpClient>();
-            users = new ObservableCollection<User>();
+            _users = new ObservableCollection<User>();
             _server = listener;
             _server.Start();
-            ListenForConnections();
+            _checkforinactiveusers = new DispatcherTimer();
+            _checkforinactiveusers.Tick += LookForInActiveUsers;
+            _checkforinactiveusers.Interval = TimeSpan.FromSeconds(5);
+            _checkforinactiveusers.Start();
+            Task.Run(ListenForConnections);
         }
 
         private void ListenForConnections()
         {
-            _listentask = new Task(() => 
-            {  
-                while (true)
+            while (true)
+            {
+                TcpClient client = _server.AcceptTcpClient();
+                _clients.Add(client);
+                ReadActiveUser();
+            }
+        }
+
+        // async void because of DispatcherTimer
+        private async void LookForInActiveUsers(object sender, EventArgs e)
+        {
+            _checkforinactiveusers.Stop();
+            await Task.Run(() =>
+            {
+                var tempcollection = _clients.ToList();
+                foreach (var client in tempcollection)
                 {
-                    TcpClient client = _server.AcceptTcpClient();
-                    _clients.Add(client);
-                    ReadActiveUser();
+                    using (NetworkStream stream = new NetworkStream(client.Client, false))
+                    {
+                        try
+                        {
+                            byte[] empty = { };
+                            stream.Write(empty, 0, empty.Length);
+                        }
+                        catch (IOException x)
+                        {
+                            var index = _clients.IndexOf(client);
+                            _clients.RemoveAt(index);
+                            _users.RemoveAt(index);
+                        }
+                    }
+                }
+                // Check whether something has been removed from the collecton.
+                if (tempcollection.Count != _clients.Count)
+                {
+                    BroadCastActiveUser(_users);
                 }
             });
-            _listentask.Start();
+            _checkforinactiveusers.Start();
         }
 
         private void ReadActiveUser()
@@ -50,10 +86,11 @@ namespace Online_Chat.Server
             BinaryFormatter bf = new BinaryFormatter();
             using (NetworkStream stream = new NetworkStream(_clients.Last().Client, false))
             {
-               users.Add((User)bf.Deserialize(stream));
+               _users.Add((User)bf.Deserialize(stream));
             }
-            BroadCastActiveUser(users);
+            BroadCastActiveUser(_users);
         }
+
         private void BroadCastActiveUser(ObservableCollection<User> usersToBroadcast)
         {
             BinaryFormatter bf = new BinaryFormatter();

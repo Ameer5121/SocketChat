@@ -19,9 +19,10 @@ namespace Online_Chat.Views
             DataContext = mainchat;
             this.Show();
         }
-        private void Exit(object sender, RoutedEventArgs e)
+        
+        private void ShowChat(object sender, EventArgs e)
         {
-            Application.Current.Shutdown();
+            this.Show();
         }
 
         private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -37,9 +38,9 @@ namespace Online_Chat.Views
             MessageBox.Show(e.Message);
         }
 
-        private void ShowChat(object sender, EventArgs e)
+        private void Exit(object sender, RoutedEventArgs e)
         {
-            this.Show();
+            Application.Current.Shutdown();
         }
     }
 }

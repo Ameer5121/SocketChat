@@ -155,7 +155,7 @@ namespace Online_Chat.ViewModels
         private async Task<ChatViewModel> ConstructChatAsync(INetworkService networkservice)
         {
             var ChatVM = new ChatViewModel(_client, _user, networkservice);
-           ChatVM.ActiveUsers = await networkservice.ReceiveUsers(_client);
+            ChatVM.ActiveUsers = await networkservice.ReceiveUsersAsync(_client);
             return ChatVM;
         }
 
