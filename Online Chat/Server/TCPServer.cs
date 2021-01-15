@@ -75,7 +75,7 @@ namespace Online_Chat.Server
                 // Check whether something has been removed from the collecton.
                 if (tempcollection.Count != _clients.Count)
                 {
-                    BroadCastActiveUser(_users);
+                    BroadCastActiveUsers(_users);
                 }
             });
             _checkforinactiveusers.Start();
@@ -88,10 +88,10 @@ namespace Online_Chat.Server
             {
                _users.Add((User)bf.Deserialize(stream));
             }
-            BroadCastActiveUser(_users);
+            BroadCastActiveUsers(_users);
         }
 
-        private void BroadCastActiveUser(ObservableCollection<User> usersToBroadcast)
+        private void BroadCastActiveUsers(ObservableCollection<User> usersToBroadcast)
         {
             BinaryFormatter bf = new BinaryFormatter();
             foreach (var Client in _clients)

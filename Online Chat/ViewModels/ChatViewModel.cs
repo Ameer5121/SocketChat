@@ -50,6 +50,8 @@ namespace Online_Chat.ViewModels
             set => SetPropertyValue(ref _activeusers, value);
         }
 
+         public string Message { get; set; }
+
          public ICommand Send => new RelayCommand(SendMessage, CanSend);
          
 
