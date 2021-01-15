@@ -43,7 +43,7 @@ namespace Online_Chat.Views
         private void InitializeChatWindow(object sender, ConnectEventArgs e)
         {
             MainChat chat = new MainChat(e.ChatVM);
-            this.Hide();
+            this.Close();
         }
 
     }
