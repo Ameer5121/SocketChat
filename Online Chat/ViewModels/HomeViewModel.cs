@@ -31,7 +31,7 @@ namespace Online_Chat.ViewModels
         private string _status;
         private bool _isconnecting;
         public event EventHandler<MessageEventArgs> Alert;
-        public event EventHandler<ConnectEventArgs> OnConnect;
+        public event EventHandler<ConnectEventArgs> OnSuccessfulConnect;
         public HomeViewModel()
         {
             _client = new TcpClient();
@@ -97,7 +97,7 @@ namespace Online_Chat.ViewModels
                     return;
                 }
                 await Task.Run(SendUser);
-                OnConnect?.Invoke(this, new ConnectEventArgs { ChatVM = await ConstructChatAsync(new NetworkService()) });
+                OnSuccessfulConnect?.Invoke(this, new ConnectEventArgs { ChatVM = await ConstructChatAsync(new NetworkService()) });
             }
             catch (FormatException)
             {

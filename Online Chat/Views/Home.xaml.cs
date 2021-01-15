@@ -19,7 +19,7 @@ namespace Online_Chat.Views
             InitializeComponent();
             DataContext = new HomeViewModel();
             (DataContext as HomeViewModel).Alert += MessageRequest;
-            (DataContext as HomeViewModel).OnConnect += InitializeChatWindow;
+            (DataContext as HomeViewModel).OnSuccessfulConnect += InitializeChatWindow;
         }
 
         private void Exit(object sender, RoutedEventArgs e)
