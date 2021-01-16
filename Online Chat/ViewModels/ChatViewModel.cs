@@ -72,7 +72,7 @@ namespace Online_Chat.ViewModels
         private async void RequestUsers(object sender, EventArgs e) 
         {
             _updateactiveusers.Stop();
-            ActiveUsers = await _networkservice.ReceiveUsersAsync(_client);
+            ActiveUsers = await _networkservice.ReceiveDataAsync<User>(_client);
             _updateactiveusers.Start();
         }
     }
