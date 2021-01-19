@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Online_Chat.Models
 {
+    [Serializable]
     public class Message
     {
         private string _sender;

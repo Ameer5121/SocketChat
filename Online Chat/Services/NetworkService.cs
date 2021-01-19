@@ -10,6 +10,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Net.Sockets;
 using System.Net;
+using ProtoBuf;
 
 namespace Online_Chat.Services
 {
@@ -19,10 +20,9 @@ namespace Online_Chat.Services
         {
             return await Task.Run(() =>
             {
-                BinaryFormatter bf = new BinaryFormatter();
                 using (NetworkStream stream = new NetworkStream(client.Client, false))
                 {
-                    return Task.FromResult((ObservableCollection<TItem>)bf.Deserialize(stream));
+                    return Task.FromResult(Serializer.DeserializeWithLengthPrefix<ObservableCollection<TItem>>(stream, PrefixStyle.Fixed32));
                 }
             });
         }

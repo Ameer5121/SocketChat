@@ -19,7 +19,7 @@ namespace Online_Chat.ViewModels
 {
     public class ChatViewModel : ViewModelBase
     {
-        private ObservableCollection<Message> _texts;
+        private ObservableCollection<Message> _messages;
         private ObservableCollection<User> _activeusers;
         private TcpClient _client;
         private User _currentuser;
@@ -30,18 +30,18 @@ namespace Online_Chat.ViewModels
         {
             _currentuser = user;
             _client = client;
-            _texts = new ObservableCollection<Message>();
+            _messages = new ObservableCollection<Message>();
             _networkservice = networkService;
             _updateactiveusers = new DispatcherTimer();
-            _updateactiveusers.Tick += RequestUsers;
+            _updateactiveusers.Tick += ReadData;
             _updateactiveusers.Interval = TimeSpan.FromSeconds(1);
            _updateactiveusers.Start();
         }
 
         public ObservableCollection<Message> Texts
         {
-           get => _texts;
-           set => SetPropertyValue(ref _texts, value);
+           get => _messages;
+           set => SetPropertyValue(ref _messages, value);
         }
 
         public ObservableCollection<User> ActiveUsers
@@ -62,17 +62,21 @@ namespace Online_Chat.ViewModels
 
         private void SendMessage()
         {
-            using (NetworkStream stream = new NetworkStream(_client.Client, false))
-            {
-                
-            }
+           
         }   
         
         // asnyc void because of DispatcherTimer
-        private async void RequestUsers(object sender, EventArgs e) 
+        private async void ReadData(object sender, EventArgs e) 
         {
             _updateactiveusers.Stop();
-            ActiveUsers = await _networkservice.ReceiveDataAsync<User>(_client);
+            object data = await _networkservice.ReceiveDataAsync<object>(_client);
+            if (data.GetType() == typeof(User))
+            {
+                _activeusers.Add(data as User);
+            }else if (data.GetType() == typeof(Message))
+            {
+                _messages.Add(data as Message);
+            }
             _updateactiveusers.Start();
         }
     }

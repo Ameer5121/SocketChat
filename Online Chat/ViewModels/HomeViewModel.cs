@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,7 +18,7 @@ using Online_Chat.Views;
 using System.Threading;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-
+using ProtoBuf;
 
 namespace Online_Chat.ViewModels
 {
@@ -140,10 +141,10 @@ namespace Online_Chat.ViewModels
         /// </summary>
         private void SendUser()
         {
-            BinaryFormatter bf = new BinaryFormatter();
             using (NetworkStream stream = new NetworkStream(_client.Client, false))
             {
-                bf.Serialize(stream, _user);
+                object buffer = _user;
+                Serializer.SerializeWithLengthPrefix(stream, buffer, PrefixStyle.Fixed32);
             }
         }
 
