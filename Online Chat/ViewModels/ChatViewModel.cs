@@ -66,7 +66,7 @@ namespace Online_Chat.ViewModels
             while (true)
             {
                 await Task.Delay(1000);
-                object data = await _networkservice.ReceiveDataAsync<SerializationData>(_client);
+               /* object data = await _networkservice.ReceiveDataAsync<SerializationData>(_client);
                 if (data.GetType() == typeof(ObservableCollection<User>))
                 {
                     // _activeusers = data.GetType();
@@ -74,7 +74,7 @@ namespace Online_Chat.ViewModels
                 else if (data.GetType() == typeof(ObservableCollection<Message>))
                 {
                     //_messages.Add(data as Message);
-                }
+                }*/
             }
             
         }

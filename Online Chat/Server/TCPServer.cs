@@ -52,8 +52,8 @@ namespace Online_Chat.Server
             while (true)
             {
                 await Task.Delay(1000);
-                var tempcollection = _clients.ToList();
-                foreach (var client in tempcollection)
+                var oldusersCount = _clients.Count;
+                foreach (var client in _clients.ToList())
                 {
                     using (NetworkStream stream = new NetworkStream(client.Client, false))
                     {
@@ -64,6 +64,7 @@ namespace Online_Chat.Server
                         }
                         catch (IOException x)
                         {
+                            // Client is disconnected
                             var index = _clients.IndexOf(client);
                             _clients.RemoveAt(index);
                             _users.RemoveAt(index);
@@ -71,7 +72,7 @@ namespace Online_Chat.Server
                     }
                 }
                 // Check whether something has been removed from the collecton.
-                if (tempcollection.Count != _clients.Count)
+                if (oldusersCount != _clients.Count)
                 {
                     BroadCastData(_users);
                 }
@@ -82,7 +83,7 @@ namespace Online_Chat.Server
             while (true)
             {
                 await Task.Delay(1000);
-                foreach (var client in _clients)
+                foreach (var client in _clients.ToList())
                 {
                     using (NetworkStream stream = new NetworkStream(client.Client, false))
                     {
@@ -103,9 +104,9 @@ namespace Online_Chat.Server
                         }
                         catch (IOException e)
                         {
-                            // No data found, so continue
+                            // No data found, continue
                             continue;
-                        }                      
+                        }
                     }
                 }
                 
@@ -113,7 +114,7 @@ namespace Online_Chat.Server
         }
         private void BroadCastData<TData>(ObservableCollection<TData> data)
         {
-            foreach (var Client in _clients)
+            foreach (var Client in _clients.ToList())
             {
                 using (NetworkStream stream = new NetworkStream(Client.Client, false))
                 {
