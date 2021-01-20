@@ -145,7 +145,7 @@ namespace Online_Chat.ViewModels
         {
             using (NetworkStream stream = new NetworkStream(_client.Client, false))
             {               
-                Serializer.SerializeWithLengthPrefix(stream, SerializationData.User, PrefixStyle.Fixed32);
+                Serializer.SerializeWithLengthPrefix(stream, SerializationData.Objects.User, PrefixStyle.Fixed32);
                 Serializer.SerializeWithLengthPrefix(stream, _user, PrefixStyle.Fixed32);
             }
         }

@@ -8,9 +8,17 @@ using ProtoBuf;
 namespace Online_Chat.Models
 {
     
-    enum SerializationData
+    class SerializationData
     {
-        User,
-        Message,
+       public enum Objects
+       {
+          User,
+          Message,
+       }
+       public enum Collections
+       {
+            UserCollection,
+            MessageCollection,
+       }
     }
 }

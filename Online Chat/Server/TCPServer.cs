@@ -77,7 +77,7 @@ namespace Online_Chat.Server
                 // Check whether something has been removed from the collecton.
                 if (oldusersCount != _clients.Count)
                 {
-                    BroadCastData(_users);
+                    BroadCastData(_users, SerializationData.Collections.UserCollection);
                 }
             }
         }
@@ -93,16 +93,16 @@ namespace Online_Chat.Server
                         stream.ReadTimeout = 500;
                         try
                         {
-                            SerializationData data = await _networkService.ReceiveDataAsync<SerializationData>(client);
-                            if (data is SerializationData.User)
+                            SerializationData.Objects data = await _networkService.ReceiveDataAsync<SerializationData.Objects>(client);
+                            if (data is SerializationData.Objects.User)
                             {
                                 _users.Add(await _networkService.ReceiveDataAsync<User>(client));
-                                BroadCastData(_users);
+                                BroadCastData(_users, SerializationData.Collections.UserCollection);
                             }
-                            else if (data is SerializationData.Message)
+                            else if (data is SerializationData.Objects.Message)
                             {
                                 _messages.Add(await _networkService.ReceiveDataAsync<Message>(client));
-                                BroadCastData(_messages);
+                                BroadCastData(_messages, SerializationData.Collections.MessageCollection);
                             }
                         }
                         catch (IOException e)
@@ -115,13 +115,14 @@ namespace Online_Chat.Server
                 
             }
         }
-        private void BroadCastData<TData>(ObservableCollection<TData> data)
+        private void BroadCastData<TData>(ObservableCollection<TData> collection, SerializationData.Collections dataType)
         {
             foreach (var Client in _clients.ToList())
             {
                 using (NetworkStream stream = new NetworkStream(Client.Client, false))
-                {                  
-                    Serializer.SerializeWithLengthPrefix(stream, data, PrefixStyle.Fixed32);
+                {
+                    Serializer.SerializeWithLengthPrefix(stream, dataType, PrefixStyle.Fixed32);
+                    Serializer.SerializeWithLengthPrefix(stream, collection, PrefixStyle.Fixed32);
                 }
             }
         }

@@ -68,16 +68,16 @@ namespace Online_Chat.ViewModels
                 // TO DO
 
 
-                /*await Task.Delay(1000);
-                SerializationData data = await _networkservice.ReceiveDataAsync<SerializationData>(_client);
-                if (data is SerializationData.User)
+                await Task.Delay(1000);
+                var collection = await _networkservice.ReceiveDataAsync<SerializationData.Collections>(_client);
+                if (collection is SerializationData.Collections.UserCollection)
                 {
                     _activeusers = await _networkservice.ReceiveDataAsync<ObservableCollection<User>>(_client);
                 }
-                else if (data is SerializationData.Message)
+                else if (collection is SerializationData.Collections.MessageCollection)
                 {
-                    //_messages.Add(data as Message);
-                }*/
+                    _messages = await _networkservice.ReceiveDataAsync<ObservableCollection<Message>>(_client);
+                }
             }
             
         }
