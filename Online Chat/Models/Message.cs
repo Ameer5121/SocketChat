@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ProtoBuf;
 
 namespace Online_Chat.Models
 {
-    [Serializable]
-    public class Message
+    [ProtoContract]
+    public class Message : SerializationData
     {
         private string _sender;
         private string _content;
 
+        [ProtoMember(1)]
         public string Sender => _sender;
+        [ProtoMember(2)]
         public string Content => _content;
     }
 }

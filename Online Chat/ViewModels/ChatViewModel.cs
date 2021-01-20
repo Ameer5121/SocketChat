@@ -24,7 +24,6 @@ namespace Online_Chat.ViewModels
         private TcpClient _client;
         private User _currentuser;
         private INetworkService _networkservice;
-        private DispatcherTimer _updateactiveusers;
 
         public ChatViewModel(TcpClient client, User user, INetworkService networkService)
         {
@@ -32,10 +31,7 @@ namespace Online_Chat.ViewModels
             _client = client;
             _messages = new ObservableCollection<Message>();
             _networkservice = networkService;
-            _updateactiveusers = new DispatcherTimer();
-            _updateactiveusers.Tick += ReadData;
-            _updateactiveusers.Interval = TimeSpan.FromSeconds(1);
-           _updateactiveusers.Start();
+            Task.Run(ReadData);
         }
 
         public ObservableCollection<Message> Texts
@@ -65,19 +61,22 @@ namespace Online_Chat.ViewModels
            
         }   
         
-        // asnyc void because of DispatcherTimer
-        private async void ReadData(object sender, EventArgs e) 
+        private async Task ReadData() 
         {
-            _updateactiveusers.Stop();
-            object data = await _networkservice.ReceiveDataAsync<object>(_client);
-            if (data.GetType() == typeof(User))
+            while (true)
             {
-                _activeusers.Add(data as User);
-            }else if (data.GetType() == typeof(Message))
-            {
-                _messages.Add(data as Message);
+                await Task.Delay(1000);
+                object data = await _networkservice.ReceiveDataAsync<SerializationData>(_client);
+                if (data.GetType() == typeof(ObservableCollection<User>))
+                {
+                    // _activeusers = data.GetType();
+                }
+                else if (data.GetType() == typeof(ObservableCollection<Message>))
+                {
+                    //_messages.Add(data as Message);
+                }
             }
-            _updateactiveusers.Start();
+            
         }
     }
 }

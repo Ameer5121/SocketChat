@@ -86,16 +86,26 @@ namespace Online_Chat.Server
                 {
                     using (NetworkStream stream = new NetworkStream(client.Client, false))
                     {
-                        object data = Serializer.DeserializeWithLengthPrefix<object>(stream, PrefixStyle.Fixed32);
-                        if (data.GetType() == typeof(User))
+                        stream.ReadTimeout = 500;
+                        try
                         {
-                            _users.Add(data as User);
-                            BroadCastData(_users);
-                        }else if(data.GetType() == typeof(Message))
-                        {
-                            _messages.Add(data as Message);
-                            BroadCastData(_messages);
+                            SerializationData data = Serializer.DeserializeWithLengthPrefix<SerializationData>(stream, PrefixStyle.Fixed32);
+                            if (data is User)
+                            {
+                                _users.Add(data as User);
+                                BroadCastData(_users);
+                            }
+                            else if (data is Message)
+                            {
+                                _messages.Add(data as Message);
+                                BroadCastData(_messages);
+                            }
                         }
+                        catch (IOException e)
+                        {
+                            // No data found, so continue
+                            continue;
+                        }                      
                     }
                 }
                 

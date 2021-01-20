@@ -11,7 +11,7 @@ using ProtoBuf;
 namespace Online_Chat.Models
 {
     [ProtoContract]
-    public class User
+    public class User : SerializationData
     {
         private string _name;
         private bool _ishosting;

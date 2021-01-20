@@ -142,9 +142,8 @@ namespace Online_Chat.ViewModels
         private void SendUser()
         {
             using (NetworkStream stream = new NetworkStream(_client.Client, false))
-            {
-                object buffer = _user;
-                Serializer.SerializeWithLengthPrefix(stream, buffer, PrefixStyle.Fixed32);
+            {               
+                Serializer.SerializeWithLengthPrefix(stream, _user as SerializationData, PrefixStyle.Fixed32);           
             }
         }
 
@@ -155,8 +154,9 @@ namespace Online_Chat.ViewModels
         /// <returns></returns>
         private async Task<ChatViewModel> ConstructChatAsync(INetworkService networkservice)
         {
+            ObservableCollection<User> users = await networkservice.ReceiveDataAsync<User>(_client);
             var ChatVM = new ChatViewModel(_client, _user, networkservice);
-            ChatVM.ActiveUsers = await networkservice.ReceiveDataAsync<User>(_client);
+            ChatVM.ActiveUsers = users;
             return ChatVM;
         }
 
