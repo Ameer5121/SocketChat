@@ -33,8 +33,10 @@ namespace Online_Chat.ViewModels
         private bool _isconnecting;
         public event EventHandler<MessageEventArgs> Alert;
         public event EventHandler<ConnectEventArgs> OnSuccessfulConnect;
+        private INetworkService _networkService;
         public HomeViewModel()
         {
+            _networkService = new NetworkService();
             _client = new TcpClient();
             _user = new User();
             Port = 5000;
@@ -98,7 +100,7 @@ namespace Online_Chat.ViewModels
                     return;
                 }
                 await Task.Run(SendUser);
-                OnSuccessfulConnect?.Invoke(this, new ConnectEventArgs { ChatVM = await ConstructChatAsync(new NetworkService()) });
+                OnSuccessfulConnect?.Invoke(this, new ConnectEventArgs { ChatVM = await ConstructChatAsync()});
             }
             catch (FormatException)
             {
@@ -130,7 +132,7 @@ namespace Online_Chat.ViewModels
 
         private void Host()
         {
-            _listener = new TCPServer(new TcpListener(IPAddress.Any, _port));          
+            _listener = new TCPServer(new TcpListener(IPAddress.Any, _port), _networkService);          
             _user.IsHosting = true;
             IP = IP.GetInternallIP();
             InitiateConnection();
@@ -143,7 +145,8 @@ namespace Online_Chat.ViewModels
         {
             using (NetworkStream stream = new NetworkStream(_client.Client, false))
             {               
-                Serializer.SerializeWithLengthPrefix(stream, _user as SerializationData, PrefixStyle.Fixed32);           
+                Serializer.SerializeWithLengthPrefix(stream, SerializationData.User, PrefixStyle.Fixed32);
+                Serializer.SerializeWithLengthPrefix(stream, _user, PrefixStyle.Fixed32);
             }
         }
 
@@ -152,10 +155,10 @@ namespace Online_Chat.ViewModels
         /// </summary>
         /// <param name="networkservice"></param>
         /// <returns></returns>
-        private async Task<ChatViewModel> ConstructChatAsync(INetworkService networkservice)
+        private async Task<ChatViewModel> ConstructChatAsync()
         {
-            ObservableCollection<User> users = await networkservice.ReceiveDataAsync<User>(_client);
-            var ChatVM = new ChatViewModel(_client, _user, networkservice);
+            var users = await Task.Run(() => _networkService.ReceiveDataAsync<ObservableCollection<User>>(_client));
+            var ChatVM = new ChatViewModel(_client, _user, _networkService);
             ChatVM.ActiveUsers = users;
             return ChatVM;
         }

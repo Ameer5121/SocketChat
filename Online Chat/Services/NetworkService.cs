@@ -16,16 +16,12 @@ namespace Online_Chat.Services
 {
     class NetworkService : INetworkService
     {
-        public async Task<ObservableCollection<T>> ReceiveDataAsync<T>(TcpClient client) 
-            where T: SerializationData
+        public Task<T> ReceiveDataAsync<T>(TcpClient client)            
         {
-            return await Task.Run(() =>
+            using (NetworkStream stream = new NetworkStream(client.Client, false))
             {
-                using (NetworkStream stream = new NetworkStream(client.Client, false))
-                {
-                    return Task.FromResult(Serializer.DeserializeWithLengthPrefix<ObservableCollection<T>>(stream, PrefixStyle.Fixed32));
-                }
-            });
+                return Task.FromResult(Serializer.DeserializeWithLengthPrefix<T>(stream, PrefixStyle.Fixed32));
+            }
         }
     }
 }

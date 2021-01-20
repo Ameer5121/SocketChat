@@ -7,8 +7,10 @@ using ProtoBuf;
 
 namespace Online_Chat.Models
 {
-    [ProtoContract] [ProtoInclude(100, typeof(User))]
-    public class SerializationData
+    
+    enum SerializationData
     {
+        User,
+        Message,
     }
 }

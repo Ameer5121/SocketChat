@@ -12,6 +12,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using Online_Chat.ViewModels;
 using Online_Chat.Models;
 using Online_Chat.Extensions;
+using Online_Chat.Services;
 using System.Collections.ObjectModel;
 using ProtoBuf;
 
@@ -24,10 +25,12 @@ namespace Online_Chat.Server
         private List<TcpClient> _clients;
         private ObservableCollection<User> _users;
         private ObservableCollection<Message> _messages;
+        private INetworkService _networkService;
 
         public TcpListener Server => _server;
-        public TCPServer(TcpListener listener)
+        public TCPServer(TcpListener listener, INetworkService networkService)
         {
+            _networkService = networkService;
             _clients = new List<TcpClient>();
             _users = new ObservableCollection<User>();
             _messages = new ObservableCollection<Message>();
@@ -90,15 +93,15 @@ namespace Online_Chat.Server
                         stream.ReadTimeout = 500;
                         try
                         {
-                            SerializationData data = Serializer.DeserializeWithLengthPrefix<SerializationData>(stream, PrefixStyle.Fixed32);
-                            if (data is User)
+                            SerializationData data = await _networkService.ReceiveDataAsync<SerializationData>(client);
+                            if (data is SerializationData.User)
                             {
-                                _users.Add(data as User);
+                                _users.Add(await _networkService.ReceiveDataAsync<User>(client));
                                 BroadCastData(_users);
                             }
-                            else if (data is Message)
+                            else if (data is SerializationData.Message)
                             {
-                                _messages.Add(data as Message);
+                                _messages.Add(await _networkService.ReceiveDataAsync<Message>(client));
                                 BroadCastData(_messages);
                             }
                         }
@@ -117,7 +120,7 @@ namespace Online_Chat.Server
             foreach (var Client in _clients.ToList())
             {
                 using (NetworkStream stream = new NetworkStream(Client.Client, false))
-                {
+                {                  
                     Serializer.SerializeWithLengthPrefix(stream, data, PrefixStyle.Fixed32);
                 }
             }

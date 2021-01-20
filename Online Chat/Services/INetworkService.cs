@@ -11,7 +11,6 @@ namespace Online_Chat.Services
 {
     public interface INetworkService
     {
-        Task<ObservableCollection<T>> ReceiveDataAsync<T>(TcpClient client)
-        where T : SerializationData;
+        Task<T> ReceiveDataAsync<T>(TcpClient client);
     }
 }

@@ -8,7 +8,7 @@ using ProtoBuf;
 namespace Online_Chat.Models
 {
     [ProtoContract]
-    public class Message : SerializationData
+    public class Message
     {
         private string _sender;
         private string _content;
