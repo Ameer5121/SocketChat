@@ -17,8 +17,8 @@ namespace Online_Chat.Models
        }
        public enum Collections
        {
-            UserCollection,
-            MessageCollection,
+          UserCollection,
+          MessageCollection,
        }
     }
 }

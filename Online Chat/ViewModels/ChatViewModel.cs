@@ -34,7 +34,7 @@ namespace Online_Chat.ViewModels
             Task.Run(ReadData);
         }
 
-        public ObservableCollection<Message> Texts
+        public ObservableCollection<Message> Messages
         {
            get => _messages;
            set => SetPropertyValue(ref _messages, value);
@@ -64,20 +64,16 @@ namespace Online_Chat.ViewModels
         private async Task ReadData() 
         {
             while (true)
-            {
-                // TO DO
-
-
+            {               
                 await Task.Delay(1000);
-                var collection = await _networkservice.ReceiveDataAsync<SerializationData.Collections>(_client);
-                if (collection is SerializationData.Collections.UserCollection)
-                {
-                    _activeusers = await _networkservice.ReceiveDataAsync<ObservableCollection<User>>(_client);
-                }
-                else if (collection is SerializationData.Collections.MessageCollection)
-                {
-                    _messages = await _networkservice.ReceiveDataAsync<ObservableCollection<Message>>(_client);
-                }
+               var data = await _networkservice.ReceiveDataAsync<SerializationData.Collections>(_client);
+               if (data is SerializationData.Collections.UserCollection)
+               {
+                    ActiveUsers = await _networkservice.ReceiveDataAsync<ObservableCollection<User>>(_client);
+               }else if (data is SerializationData.Collections.MessageCollection)
+               {
+                    Messages = await _networkservice.ReceiveDataAsync<ObservableCollection<Message>>(_client);
+               }
             }
             
         }
