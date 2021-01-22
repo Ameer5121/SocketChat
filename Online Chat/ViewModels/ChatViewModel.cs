@@ -65,17 +65,20 @@ namespace Online_Chat.ViewModels
         {
             while (true)
             {               
-                await Task.Delay(1000);
-               var data = await _networkservice.ReceiveDataAsync<SerializationData.Collections>(_client);
-               if (data is SerializationData.Collections.UserCollection)
+               await Task.Delay(1000);
+               var datatype = await _networkservice.ReceiveDataAsync<SerializationData.Collections>(_client);
+               SerializationData data;
+               if (datatype is SerializationData.Collections.UserCollection)
                {
-                    ActiveUsers = await _networkservice.ReceiveDataAsync<ObservableCollection<User>>(_client);
-               }else if (data is SerializationData.Collections.MessageCollection)
-               {
-                    Messages = await _networkservice.ReceiveDataAsync<ObservableCollection<Message>>(_client);
+                   data = await _networkservice.ReceiveDataAsync<SerializationData>(_client);
+                   ActiveUsers = data.UserCollection;
                }
-            }
-            
+               else if (datatype is SerializationData.Collections.MessageCollection)
+               {
+                   data = await _networkservice.ReceiveDataAsync<SerializationData>(_client);
+                  _messages = data.MessageCollection;
+               }
+            }            
         }
     }
 }

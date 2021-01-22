@@ -157,10 +157,11 @@ namespace Online_Chat.ViewModels
         /// <returns></returns>
         private async Task<ChatViewModel> ConstructChatAsync()
         {
-            var users = await Task.Run(() => 
+            var users = await Task.Run(async () => 
             {
-                _networkService.ReceiveDataAsync<SerializationData.Collections>(_client);
-                return _networkService.ReceiveDataAsync<ObservableCollection<User>>(_client);
+                var datatype = await _networkService.ReceiveDataAsync<SerializationData.Collections>(_client);
+                var data = await _networkService.ReceiveDataAsync<SerializationData>(_client);
+                return data.UserCollection;
             });
             var ChatVM = new ChatViewModel(_client, _user, _networkService);
             ChatVM.ActiveUsers = users;

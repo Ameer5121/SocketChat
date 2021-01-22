@@ -14,8 +14,16 @@ namespace Online_Chat.Models
         private string _content;
 
         [ProtoMember(1)]
-        public string Sender => _sender;
+        public string Sender
+        {           
+            get => _sender;
+            set => _sender = value;
+        }
         [ProtoMember(2)]
-        public string Content => _content;
+        public string Content
+        {
+            get => _content;
+            set => _content = value;
+        }
     }
 }
