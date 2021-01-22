@@ -84,8 +84,7 @@ namespace Online_Chat.Server
         private async Task ReadData()
         {
             while (true)
-            {
-                await Task.Delay(1000);
+            {               
                 foreach (var client in _clients.ToList())
                 {
                     using (NetworkStream stream = new NetworkStream(client.Client, false))

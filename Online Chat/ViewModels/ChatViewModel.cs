@@ -15,6 +15,7 @@ using System.Windows.Threading;
 using System.Threading.Tasks;
 using Online_Chat.Extensions;
 using Online_Chat.Services;
+using ProtoBuf;
 namespace Online_Chat.ViewModels
 {
     public class ChatViewModel : ViewModelBase
@@ -58,7 +59,13 @@ namespace Online_Chat.ViewModels
 
         private void SendMessage()
         {
-           
+           using (NetworkStream stream = new NetworkStream(_client.Client, false))
+           {
+
+                Message message = new Message(_currentuser.Name, Message);
+                Serializer.SerializeWithLengthPrefix(stream, SerializationData.Objects.Message, PrefixStyle.Fixed32);
+                Serializer.SerializeWithLengthPrefix(stream, message, PrefixStyle.Fixed32);
+           }
         }   
         
         private async Task ReadData() 
@@ -76,7 +83,7 @@ namespace Online_Chat.ViewModels
                else if (datatype is SerializationData.Collections.MessageCollection)
                {
                    data = await _networkservice.ReceiveDataAsync<SerializationData>(_client);
-                  _messages = data.MessageCollection;
+                  Messages = data.MessageCollection;
                }
             }            
         }
