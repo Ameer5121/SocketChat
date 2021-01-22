@@ -37,7 +37,7 @@ namespace Online_Chat.Server
             _server.Start();
             Task.Run(ListenForConnections);
             Task.Run(LookForInActiveUsers);
-            Task.Run(ReadData);
+            ReadData();
         }
 
         private void ListenForConnections()
@@ -81,11 +81,11 @@ namespace Online_Chat.Server
                 }
             }
         }
-        private async Task ReadData()
+        private void ReadData()
         {
             while (true)
-            {               
-                foreach (var client in _clients.ToList())
+            {
+                Parallel.ForEach(_clients.ToList(), async (client) =>
                 {
                     using (NetworkStream stream = new NetworkStream(client.Client, false))
                     {
@@ -96,23 +96,23 @@ namespace Online_Chat.Server
                             if (data is SerializationData.Objects.User)
                             {
                                 _users.Add(await _networkService.ReceiveDataAsync<User>(client));
-                                BroadCastData(new SerializationData(_users, null), 
+                                BroadCastData(new SerializationData(_users, null),
                                     SerializationData.Collections.UserCollection);
                             }
                             else if (data is SerializationData.Objects.Message)
                             {
                                 _messages.Add(await _networkService.ReceiveDataAsync<Message>(client));
-                                BroadCastData(new SerializationData (null, _messages), 
+                                BroadCastData(new SerializationData(null, _messages),
                                     SerializationData.Collections.MessageCollection);
                             }
                         }
                         catch (IOException e)
                         {
-                            // No data found, continue
-                            continue;
+                            // No data found.
+                            return;
                         }
                     }
-                }
+                });
                 
             }
         }

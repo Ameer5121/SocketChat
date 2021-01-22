@@ -24,6 +24,7 @@ namespace Online_Chat.ViewModels
         private ObservableCollection<User> _activeusers;
         private TcpClient _client;
         private User _currentuser;
+        private string _message;
         private INetworkService _networkservice;
 
         public ChatViewModel(TcpClient client, User user, INetworkService networkService)
@@ -47,7 +48,11 @@ namespace Online_Chat.ViewModels
             set => SetPropertyValue(ref _activeusers, value);
         }
 
-         public string Message { get; set; }
+         public string Message 
+         {
+            get => _message;
+            set => SetPropertyValue(ref _message, value);
+         }
 
          public ICommand Send => new RelayCommand(SendMessage, CanSend);
          
@@ -65,6 +70,7 @@ namespace Online_Chat.ViewModels
                 Message message = new Message(_currentuser.Name, Message);
                 Serializer.SerializeWithLengthPrefix(stream, SerializationData.Objects.Message, PrefixStyle.Fixed32);
                 Serializer.SerializeWithLengthPrefix(stream, message, PrefixStyle.Fixed32);
+                Message = default;
            }
         }   
         

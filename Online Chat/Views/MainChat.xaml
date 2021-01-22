@@ -31,7 +31,7 @@
             </Button>
         </Border>
 
-        <TextBox Background="#FF424040" Margin="8,533,0,0"  FontSize="20" BorderBrush="Transparent" Grid.Column="1" Grid.Row="1" Text="{Binding Message}">
+        <TextBox Background="#FF424040" Margin="8,533,0,0"  FontSize="20" BorderBrush="Transparent" Grid.Column="1" Grid.Row="1" Text="{Binding Message, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 
         </TextBox>
         <Button Background="Silver" Content="Send" Margin="534,533,0,0" Command="{Binding Send}" Grid.Column="1" Grid.Row="1"></Button>
@@ -41,10 +41,9 @@
                 <DataTemplate>
                     <StackPanel>
                         <TextBlock FontSize="15" Foreground="ForestGreen">
-                            <Run Text="{Binding Sender, Mode=OneWay}"></Run>
+                            <Run Text="{Binding Sender, Mode=OneWay}" Foreground="ForestGreen"></Run>
                             <Run Text=":"></Run>
-                            <Run Text=" "></Run>
-                            <Run Text="{Binding Content, Mode=OneWay}"></Run>
+                            <Run Text="{Binding Content, Mode=OneWay}" Foreground="White"></Run>
                         </TextBlock>
                     </StackPanel>
                 </DataTemplate>
