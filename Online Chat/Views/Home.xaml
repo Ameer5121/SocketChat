@@ -33,7 +33,7 @@
         <TextBox Margin="190,189,226,235" TextAlignment="Center" FontSize="13" Text="{Binding Port, UpdateSourceTrigger=LostFocus}"></TextBox>
         <TextBlock Text="{Binding Status}" Foreground="Silver" TextAlignment="Center" Margin="214,222,255,206"></TextBlock>
         <TextBlock Text="Name" Margin="230,43,261,386" FontSize="14" Foreground="White" TextAlignment="Center"></TextBlock>
-        <TextBox Margin="190,71,226,353" TextAlignment="Center" FontSize="13" Text="{Binding User.Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        <TextBox Margin="190,71,226,353" TextAlignment="Center" FontSize="13" Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
 
     </Grid>
 </Window>

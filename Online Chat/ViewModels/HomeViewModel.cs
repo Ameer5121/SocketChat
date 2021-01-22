@@ -27,6 +27,7 @@ namespace Online_Chat.ViewModels
         private User _user;
         private TcpClient _client;
         private TCPServer _listener;
+        private string _username;
         private string _ipaddress;
         private int _port;        
         private string _status;
@@ -38,12 +39,15 @@ namespace Online_Chat.ViewModels
         {
             _networkService = new NetworkService();
             _client = new TcpClient();
-            _user = new User();
             Port = 5000;
             IP = "0.0.0.0";
         }
 
-        public User User => _user;
+        public string UserName 
+        {
+            get => _username;
+            set => _username = value;
+        }
 
         public TcpClient Client => _client;
         public string IP
@@ -79,7 +83,7 @@ namespace Online_Chat.ViewModels
 
         private bool CanConnect()
         {
-            if (User.Name != null && !_isconnecting)
+            if (_username != null && !_isconnecting)
                 return true;
 
             return false;
@@ -99,6 +103,7 @@ namespace Online_Chat.ViewModels
                     _isconnecting = false;
                     return;
                 }
+                CreateUser(false);
                 await Task.Run(SendUser);
                 OnSuccessfulConnect?.Invoke(this, new ConnectEventArgs { ChatVM = await ConstructChatAsync()});
             }
@@ -124,7 +129,7 @@ namespace Online_Chat.ViewModels
 
         private bool CanHost()
         {
-            if (User.Name != null && _isconnecting == false)
+            if (_username != null && _isconnecting == false)
                 return true;
 
             return false; 
@@ -132,8 +137,8 @@ namespace Online_Chat.ViewModels
 
         private void Host()
         {
-            _listener = new TCPServer(new TcpListener(IPAddress.Any, _port), _networkService);          
-            _user.IsHosting = true;
+            _listener = new TCPServer(new TcpListener(IPAddress.Any, _port), _networkService);
+            CreateUser(true);
             IP = IP.GetInternallIP();
             InitiateConnection();
         }
@@ -173,5 +178,9 @@ namespace Online_Chat.ViewModels
             Status = status;
         }
 
+        private void CreateUser(bool ishosting)
+        {
+            _user = new User(_username, ishosting);
+        }
     }
 }

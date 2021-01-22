@@ -11,21 +11,18 @@ using ProtoBuf;
 namespace Online_Chat.Models
 {
     [ProtoContract]
-    public class User
+    public readonly struct User
     {
-        private string _name;
-        private bool _ishosting;
         [ProtoMember(1)]
-        public string Name
-        {
-            get => _name;
-            set => _name = value;
-        }
+        public readonly string Name;
         [ProtoMember(2)]
-        public bool IsHosting
+        public readonly bool IsHosting;
+
+        public User(string name, bool ishosting)
         {
-            get => _ishosting;
-            set => _ishosting = value;
+            Name = name;
+            IsHosting = ishosting;
         }
+       
     }
 }

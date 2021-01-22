@@ -124,7 +124,7 @@ namespace Online_Chat.Server
                 using (NetworkStream stream = new NetworkStream(Client.Client, false))
                 {
                     Serializer.SerializeWithLengthPrefix(stream, dataType, PrefixStyle.Fixed32);
-                    Serializer.SerializeWithLengthPrefix(stream, data, PrefixStyle.Fixed32);
+                    Serializer.SerializeWithLengthPrefix(stream, new Message(), PrefixStyle.Fixed32);
                 }
             }
         }

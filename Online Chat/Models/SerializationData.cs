@@ -9,7 +9,7 @@ using ProtoBuf;
 namespace Online_Chat.Models
 {
     [ProtoContract]
-    public class SerializationData
+    public struct SerializationData
     {
         private ObservableCollection<User> _usercollection;
         private ObservableCollection<Message> _messagecollection;
