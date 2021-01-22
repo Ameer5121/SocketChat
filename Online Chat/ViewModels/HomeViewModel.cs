@@ -93,13 +93,13 @@ namespace Online_Chat.ViewModels
         {
             try
             {            
-                UpdateStatus("Connecting...");
+                UpdateStatus("Connecting...", true);
                 _isconnecting = true;
                 await Task.WhenAny(Task.Delay(5000), _client.ConnectAsync(IPAddress.Parse(_ipaddress), _port));
                 if (!_client.Connected)
                 {
                     Alert?.Invoke(this, new MessageEventArgs { Message = "The remote server does not exist!" });
-                    UpdateStatus(default);
+                    UpdateStatus(default, false);
                     _isconnecting = false;
                     return;
                 }
@@ -110,20 +110,17 @@ namespace Online_Chat.ViewModels
             catch (FormatException)
             {
                Alert?.Invoke(this, new MessageEventArgs { Message = "Please type a correct IP/Port address!" });
-               UpdateStatus(default);
-               _isconnecting = false;
+               UpdateStatus(default, false);
             }
             catch (ArgumentException x)
             {
               Alert?.Invoke(this, new MessageEventArgs { Message = x.Message });
-              UpdateStatus(default);
-              _isconnecting = false;
+              UpdateStatus(default, false);
             }
             catch (SocketException y)
             {
               Alert?.Invoke(this, new MessageEventArgs { Message = y.Message });
-              UpdateStatus(default);
-              _isconnecting = false;
+              UpdateStatus(default, false);
             }
         }
 
@@ -173,14 +170,12 @@ namespace Online_Chat.ViewModels
             return ChatVM;
         }
 
-        private void UpdateStatus(string status)
+        private void UpdateStatus(string status, bool connectingstatus)
         {
             Status = status;
+            _isconnecting = connectingstatus;
         }
 
-        private void CreateUser(bool ishosting)
-        {
-            _user = new User(_username, ishosting);
-        }
+        private void CreateUser(bool ishosting) => _user = new User(_username, ishosting);
     }
 }
