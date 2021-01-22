@@ -76,7 +76,7 @@ namespace Online_Chat.Server
                 // Check whether something has been removed from the collecton.
                 if (oldusersCount != _clients.Count)
                 {
-                    BroadCastData(new SerializationData { UserCollection = _users },
+                    BroadCastData(new SerializationData(_users, null),
                     SerializationData.Collections.UserCollection);
                 }
             }
@@ -97,13 +97,13 @@ namespace Online_Chat.Server
                             if (data is SerializationData.Objects.User)
                             {
                                 _users.Add(await _networkService.ReceiveDataAsync<User>(client));
-                                BroadCastData(new SerializationData { UserCollection = _users }, 
+                                BroadCastData(new SerializationData(_users, null), 
                                     SerializationData.Collections.UserCollection);
                             }
                             else if (data is SerializationData.Objects.Message)
                             {
                                 _messages.Add(await _networkService.ReceiveDataAsync<Message>(client));
-                                BroadCastData(new SerializationData { MessageCollection = _messages}, 
+                                BroadCastData(new SerializationData (null, _messages), 
                                     SerializationData.Collections.MessageCollection);
                             }
                         }
@@ -124,7 +124,7 @@ namespace Online_Chat.Server
                 using (NetworkStream stream = new NetworkStream(Client.Client, false))
                 {
                     Serializer.SerializeWithLengthPrefix(stream, dataType, PrefixStyle.Fixed32);
-                    Serializer.SerializeWithLengthPrefix(stream, new Message(), PrefixStyle.Fixed32);
+                    Serializer.SerializeWithLengthPrefix(stream, data, PrefixStyle.Fixed32);
                 }
             }
         }

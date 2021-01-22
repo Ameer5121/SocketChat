@@ -8,12 +8,12 @@ using ProtoBuf;
 namespace Online_Chat.Models
 {
     [ProtoContract]
-    public readonly struct Message
+    public struct Message
     {
         [ProtoMember(1)]
-        public readonly string Sender;
+        public string Sender { get; }
         [ProtoMember(2)]
-        public readonly string Content;
+        public string Content { get; }
 
 
         public Message(string sender, string content)

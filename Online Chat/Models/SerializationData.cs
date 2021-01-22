@@ -9,25 +9,19 @@ using ProtoBuf;
 namespace Online_Chat.Models
 {
     [ProtoContract]
-    public struct SerializationData
+    public readonly struct SerializationData
     {
-        private ObservableCollection<User> _usercollection;
-        private ObservableCollection<Message> _messagecollection;
-
         [ProtoMember(1)]
-        public ObservableCollection<User> UserCollection
-        {
-            get => _usercollection;
-            set => _usercollection = value;
-        }
+        public readonly ObservableCollection<User> UserCollection;
         [ProtoMember(2)]
-        public ObservableCollection<Message> MessageCollection
+        public readonly ObservableCollection<Message> MessageCollection;
+
+        public SerializationData(ObservableCollection<User> usercollection, ObservableCollection<Message> messagecollection)
         {
-            get => _messagecollection;
-            set => _messagecollection = value;
+            UserCollection = usercollection;
+            MessageCollection = messagecollection;
         }
 
-      
         //Byte Identification 
         public enum Objects
         {
