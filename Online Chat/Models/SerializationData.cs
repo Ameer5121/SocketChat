@@ -23,11 +23,11 @@ namespace Online_Chat.Models
         }
 
         //Byte Identification 
-        public enum Objects
-        {
-          User,
-          Message,
-        }
+       public enum Objects
+       {
+         User,
+         Message,
+       }
        public enum Collections
        {
           UserCollection,

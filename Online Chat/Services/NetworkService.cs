@@ -20,6 +20,7 @@ namespace Online_Chat.Services
         {
             using (NetworkStream stream = new NetworkStream(client.Client, false))
             {
+                stream.ReadTimeout = 3000;
                 return Task.FromResult(Serializer.DeserializeWithLengthPrefix<T>(stream, PrefixStyle.Fixed32));
             }
         }

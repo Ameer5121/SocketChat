@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -78,21 +79,26 @@ namespace Online_Chat.ViewModels
         
         private async Task ReadData() 
         {
-            while (true)
-            {               
-               await Task.Delay(1000);
-               var datatype = await _networkservice.ReceiveDataAsync<SerializationData.Collections>(_client);
-               SerializationData data;
-               if (datatype is SerializationData.Collections.UserCollection)
-               {
-                   data = await _networkservice.ReceiveDataAsync<SerializationData>(_client);
-                   ActiveUsers = data.UserCollection;
-               }
-               else if (datatype is SerializationData.Collections.MessageCollection)
-               {
-                   data = await _networkservice.ReceiveDataAsync<SerializationData>(_client);
-                  Messages = data.MessageCollection;
-               }
+            while (true)             
+            {
+                try
+                {
+                    var datatype = await _networkservice.ReceiveDataAsync<SerializationData.Collections>(_client);
+                    SerializationData data;
+                    if (datatype is SerializationData.Collections.UserCollection)
+                    {
+                        data = await _networkservice.ReceiveDataAsync<SerializationData>(_client);
+                        ActiveUsers = data.UserCollection;
+                    }
+                    else if (datatype is SerializationData.Collections.MessageCollection)
+                    {
+                        data = await _networkservice.ReceiveDataAsync<SerializationData>(_client);
+                        Messages = data.MessageCollection;
+                    }
+                }catch(IOException e)
+                {
+                    // No data is found.
+                }
             }            
         }
     }

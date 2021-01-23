@@ -57,20 +57,20 @@ namespace Online_Chat.Server
                 var oldusersCount = _clients.Count;
                 foreach (var client in _clients.ToList())
                 {
-                    using (NetworkStream stream = new NetworkStream(client.Client, false))
+                    try
                     {
-                        try
+                        using (NetworkStream stream = new NetworkStream(client.Client, false))
                         {
-                            byte[] empty = { };
-                            stream.Write(empty, 0, empty.Length);
+                            byte[] emptydata = { };
+                            stream.Write(emptydata, 0, emptydata.Length);
                         }
-                        catch (IOException x)
-                        {
-                            // Client is disconnected
-                            var index = _clients.IndexOf(client);
-                            _clients.RemoveAt(index);
-                            _users.RemoveAt(index);
-                        }
+                    }
+                    catch (IOException x)
+                    {
+                        // Client is disconnected
+                        var index = _clients.IndexOf(client);
+                        _clients.RemoveAt(index);
+                        _users.RemoveAt(index);
                     }
                 }
                 // Check whether something has been removed from the collecton.
@@ -89,30 +89,25 @@ namespace Online_Chat.Server
                 {
                     try
                     {
-                        using (NetworkStream stream = new NetworkStream(client.Client, false))
+                        SerializationData.Objects data = await _networkService.ReceiveDataAsync<SerializationData.Objects>(client);
+                        if (data is SerializationData.Objects.User)
                         {
-                            stream.ReadTimeout = 500;
-                            SerializationData.Objects data = await _networkService.ReceiveDataAsync<SerializationData.Objects>(client);
-                            if (data is SerializationData.Objects.User)
-                            {
-                                _users.Add(await _networkService.ReceiveDataAsync<User>(client));
-                                BroadCastData(new SerializationData(_users, null),
-                                    SerializationData.Collections.UserCollection);
-                            }
-                            else if (data is SerializationData.Objects.Message)
-                            {
-                                _messages.Add(await _networkService.ReceiveDataAsync<Message>(client));
-                                BroadCastData(new SerializationData(null, _messages),
-                                    SerializationData.Collections.MessageCollection);
-                            }
+                            _users.Add(await _networkService.ReceiveDataAsync<User>(client));
+                            BroadCastData(new SerializationData(_users, null),
+                                SerializationData.Collections.UserCollection);
+                        }
+                        else if (data is SerializationData.Objects.Message)
+                        {
+                            _messages.Add(await _networkService.ReceiveDataAsync<Message>(client));
+                            BroadCastData(new SerializationData(null, _messages),
+                                SerializationData.Collections.MessageCollection);
                         }
                     }
                     catch (IOException e)
                     {
                         // Either client is not connected or data is not found. Continue.
                         return;
-                    }
-                   
+                    }                  
                 });              
             }
         }
