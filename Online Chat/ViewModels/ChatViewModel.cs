@@ -59,6 +59,9 @@ namespace Online_Chat.ViewModels
 
         private bool CanSend()
         {
+            if (Message == default)
+                return false;
+            
             return true;
         }
 
@@ -66,7 +69,6 @@ namespace Online_Chat.ViewModels
         {
            using (NetworkStream stream = new NetworkStream(_client.Client, false))
            {
-
                 Message message = new Message(_currentuser.Name, Message);
                 Serializer.SerializeWithLengthPrefix(stream, SerializationData.Objects.Message, PrefixStyle.Fixed32);
                 Serializer.SerializeWithLengthPrefix(stream, message, PrefixStyle.Fixed32);
