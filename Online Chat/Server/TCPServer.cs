@@ -87,11 +87,11 @@ namespace Online_Chat.Server
             {
                 Parallel.ForEach(_clients.ToList(), async (client) =>
                 {
-                    using (NetworkStream stream = new NetworkStream(client.Client, false))
+                    try
                     {
-                        stream.ReadTimeout = 500;
-                        try
+                        using (NetworkStream stream = new NetworkStream(client.Client, false))
                         {
+                            stream.ReadTimeout = 500;
                             SerializationData.Objects data = await _networkService.ReceiveDataAsync<SerializationData.Objects>(client);
                             if (data is SerializationData.Objects.User)
                             {
@@ -106,12 +106,13 @@ namespace Online_Chat.Server
                                     SerializationData.Collections.MessageCollection);
                             }
                         }
-                        catch (IOException e)
-                        {
-                            // No data found.
-                            return;
-                        }
                     }
+                    catch (IOException e)
+                    {
+                        // Either client is not connected or data is not found. Continue.
+                        return;
+                    }
+                   
                 });              
             }
         }
