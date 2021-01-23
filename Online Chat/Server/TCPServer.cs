@@ -37,7 +37,7 @@ namespace Online_Chat.Server
             _server.Start();
             Task.Run(ListenForConnections);
             Task.Run(LookForInActiveUsers);
-            ReadData();
+            Task.Run(ReadData);
         }
 
         private void ListenForConnections()
@@ -112,8 +112,7 @@ namespace Online_Chat.Server
                             return;
                         }
                     }
-                });
-                
+                });              
             }
         }
         private void BroadCastData(SerializationData data, SerializationData.Collections dataType)
