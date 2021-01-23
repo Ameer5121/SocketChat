@@ -32,31 +32,36 @@
         </Border>
 
         <TextBox Background="#FF424040" Margin="8,533,0,0"  FontSize="20" BorderBrush="Transparent" Grid.Column="1" Grid.Row="1" Text="{Binding Message, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-
+            <TextBox.InputBindings>
+                <KeyBinding Command="{Binding Send}" Key="Enter" />
+            </TextBox.InputBindings>
         </TextBox>
-        <Button Background="Silver" Content="Send" Margin="534,533,0,0" Command="{Binding Send}" Grid.Column="1" Grid.Row="1"></Button>
 
-        <ListBox Background="Silver" Margin="8,1.667,0,47" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Messages}">
+        <TextBlock Text="Message History" Foreground="White" Grid.Column="1" Margin="232,3,268,554" Grid.Row="1"></TextBlock>
+        <ListBox Background="Gray" Margin="8,23,0,47" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Messages}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
-                        <TextBlock FontSize="15" Foreground="ForestGreen">
-                            <Run Text="{Binding Sender, Mode=OneWay}" Foreground="ForestGreen"></Run>
-                            <Run Text=":"></Run>
-                            <Run Text="{Binding Content, Mode=OneWay}" Foreground="White"></Run>
+                        <TextBlock FontSize="15" Foreground="LightCyan">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0}: " Mode="OneWay">
+                                    <Binding Path="Sender" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                            <Run Text="{Binding Content,Mode=OneWay}" Foreground="Silver"></Run>
                         </TextBlock>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <TextBlock Text="Users:" Margin="49,3,62,562" Grid.Row="1" TextAlignment="Center"></TextBlock>
-        <ListView Grid.Column="0" Margin="0,23,0,47" Grid.Row="1" BorderBrush="Black" Background="Silver" ItemsSource="{Binding ActiveUsers}">
+        <TextBlock Text="Users:" Foreground="White" Margin="49,3,62,562" Grid.Row="1" TextAlignment="Center"></TextBlock>
+        <ListView Grid.Column="0" Margin="0,23,0,47" Grid.Row="1" BorderBrush="Black" Background="Gray" ItemsSource="{Binding ActiveUsers}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
-                        <TextBlock FontSize="15" Foreground="ForestGreen" Text="{Binding Name}"></TextBlock>
-                        <TextBlock FontSize="15" Foreground="ForestGreen" Text=""></TextBlock>
+                        <TextBlock FontSize="15" Foreground="Green" Text="{Binding Name}"></TextBlock>
+                        <TextBlock Text=""></TextBlock>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
