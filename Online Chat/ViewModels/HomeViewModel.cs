@@ -94,7 +94,6 @@ namespace Online_Chat.ViewModels
             try
             {            
                 UpdateStatus("Connecting...", true);
-                _isconnecting = true;
                 await Task.WhenAny(Task.Delay(5000), _client.ConnectAsync(IPAddress.Parse(_ipaddress), _port));
                 if (!_client.Connected)
                 {
