@@ -36,7 +36,7 @@ namespace Online_Chat.Server
             _server = listener;
             _server.Start();
             Task.Run(ListenForConnections);
-            Task.Run(LookForInActiveUsers);
+            //Task.Run(LookForInActiveUsers);
             Task.Run(ReadData);
         }
 
@@ -99,13 +99,14 @@ namespace Online_Chat.Server
                         else if (data is SerializationData.Objects.Message)
                         {
                             _messages.Add(await _networkService.ReceiveDataAsync<Message>(client));
-                            BroadCastData(new SerializationData(null, _messages),
+                            BroadCastData(new SerializationData (null, _messages),
                                 SerializationData.Collections.MessageCollection);
                         }
                     }
                     catch (IOException e)
                     {
                         // Either client is not connected or data is not found. Continue.
+                        
                         return;
                     }                  
                 });              

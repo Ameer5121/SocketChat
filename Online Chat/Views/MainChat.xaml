@@ -66,5 +66,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListView>
+
+        <Button Background="Black" Margin="-10,538,10,2" Grid.Row="1" Command="{Binding Stress}"></Button>
     </Grid>
 </Window>

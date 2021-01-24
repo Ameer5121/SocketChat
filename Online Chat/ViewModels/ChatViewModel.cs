@@ -23,6 +23,7 @@ namespace Online_Chat.ViewModels
     {
         private ObservableCollection<Message> _messages;
         private ObservableCollection<User> _activeusers;
+        private List<TcpClient> stresstestusers;
         private TcpClient _client;
         private User _currentuser;
         private string _message;
@@ -33,6 +34,7 @@ namespace Online_Chat.ViewModels
             _currentuser = user;
             _client = client;
             _messages = new ObservableCollection<Message>();
+            stresstestusers = new List<TcpClient>();
             _networkservice = networkService;
             Task.Run(ReadData);
         }
@@ -56,7 +58,8 @@ namespace Online_Chat.ViewModels
          }
 
          public ICommand Send => new RelayCommand(SendMessage, CanSend);
-         
+         public ICommand Stress => new RelayCommand(StressTest);
+
 
         private bool CanSend()
         {
@@ -100,6 +103,24 @@ namespace Online_Chat.ViewModels
                     // No data is found.
                 }
             }            
+        }
+
+        private async Task StressTest()
+        {
+            await Task.Run(async () =>
+            {
+                for (int i = 0; i < 500; i++)
+                {
+                    TcpClient client = new TcpClient();
+                    stresstestusers.Add(client);
+                    await client.ConnectAsync(IPAddress.Parse("192.168.14.15"), 5000);
+                    using (NetworkStream stream = new NetworkStream(client.Client, false))
+                    {
+                        Serializer.SerializeWithLengthPrefix(stream, SerializationData.Objects.User, PrefixStyle.Fixed32);
+                        Serializer.SerializeWithLengthPrefix(stream, new User(i.ToString(), false), PrefixStyle.Fixed32);
+                    }
+                }
+            });
         }
     }
 }
