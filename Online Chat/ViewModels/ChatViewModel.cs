@@ -27,7 +27,7 @@ namespace Online_Chat.ViewModels
         private User _currentuser;
         private string _message;
         private INetworkService _networkservice;
-
+        private SynchronizationContext location = SynchronizationContext.Current;
         public ChatViewModel(TcpClient client, User user, INetworkService networkService)
         {
             _currentuser = user;
@@ -93,7 +93,12 @@ namespace Online_Chat.ViewModels
                     else if (datatype is SerializationData.Collections.MessageCollection)
                     {
                         data = await _networkservice.ReceiveDataAsync<SerializationData>(_client);
-                        Messages = data.MessageCollection;
+                        location.Post(delegate
+                        {
+                            Messages.Clear();
+                            foreach (var message in data.MessageCollection)
+                                Messages.Add(message);
+                        }, null);
                     }
                 }catch(IOException e)
                 {

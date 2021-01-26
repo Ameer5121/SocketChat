@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Online_Chat.Views"
+        xmlns:Scroll="clr-namespace:Online_Chat.Helper"
         mc:Ignorable="d"
         Height="620" Width="734" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" MouseDown="Window_MouseDown">
     <Grid Background="#FF575757">
@@ -38,7 +39,8 @@
         </TextBox>
 
         <TextBlock Text="Message History" Foreground="White" Grid.Column="1" Margin="232,3,268,554" Grid.Row="1"></TextBlock>
-        <ListBox Background="Gray" Margin="8,23,0,47" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Messages}">
+        <ListBox Background="Gray" Margin="8,23,0,47" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Messages}"
+                 Scroll:ScrollBehavior.ScrollOnNewItem="True">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
