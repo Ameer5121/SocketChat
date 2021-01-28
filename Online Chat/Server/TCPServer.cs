@@ -53,7 +53,7 @@ namespace Online_Chat.Server
         {
             while (true)
             {
-                await Task.Delay(1000);
+                await Task.Delay(3000);
                 var oldusersCount = _clients.Count;
                 foreach (var client in _clients.ToList())
                 {

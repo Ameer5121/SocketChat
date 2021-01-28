@@ -32,7 +32,10 @@
             </Button>
         </Border>
 
-        <TextBox Background="#FF424040" Margin="8,533,0,0"  FontSize="20" BorderBrush="Transparent" Grid.Column="1" Grid.Row="1" Text="{Binding Message, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        <TextBox Background="#FF424040" Margin="8,533,0,0"  FontSize="20" BorderBrush="Transparent" Grid.Column="1" Grid.Row="1" 
+                 Text="{Binding Message, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 MaxLines="500"
+                 >
             <TextBox.InputBindings>
                 <KeyBinding Command="{Binding Send}" Key="Enter" />
             </TextBox.InputBindings>
@@ -44,7 +47,7 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
-                        <TextBlock FontSize="15" Foreground="LightCyan">
+                        <TextBlock FontSize="15" Foreground="LightCyan" TextWrapping="Wrap">
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}{0}: " Mode="OneWay">
                                     <Binding Path="Sender" />

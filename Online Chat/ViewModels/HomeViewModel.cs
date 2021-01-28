@@ -60,6 +60,7 @@ namespace Online_Chat.ViewModels
             }
 
         }
+
         public int Port
         {
             get => _port;
