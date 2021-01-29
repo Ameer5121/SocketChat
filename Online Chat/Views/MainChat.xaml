@@ -16,6 +16,8 @@
             <ColumnDefinition Width="73*"/>
             <ColumnDefinition Width="294*"/>
         </Grid.ColumnDefinitions>
+       
+        <!--Black Border-->
         <Border Background="#FF212020" Margin="0,0,0,578" Grid.ColumnSpan="2" Grid.RowSpan="2">
             <Button Margin="684,0,0,0" RenderTransformOrigin="1.185,0.522" BorderBrush="Transparent" Cursor="Hand" Click="Exit" Template="{StaticResource CustomizedButton}">
                 <Image Source="/Images/Exit.png" Height="34" Width="30"></Image>
@@ -32,6 +34,7 @@
             </Button>
         </Border>
 
+        <!--Chat TextBox-->
         <TextBox Background="#FF424040" Margin="8,533,0,0"  FontSize="20" BorderBrush="Transparent" Grid.Column="1" Grid.Row="1" 
                  Text="{Binding Message, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  MaxLines="500"
@@ -41,7 +44,11 @@
             </TextBox.InputBindings>
         </TextBox>
 
+        
+
         <TextBlock Text="Message History" Foreground="White" Grid.Column="1" Margin="232,3,268,554" Grid.Row="1"></TextBlock>
+        
+        <!--Messages ListBox-->
         <ListBox Background="Gray" Margin="8,23,0,47" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Messages}"
                  Scroll:ScrollBehavior.ScrollOnNewItem="True">
             <ListBox.ItemTemplate>
@@ -61,6 +68,8 @@
         </ListBox>
 
         <TextBlock Text="Users:" Foreground="White" Margin="49,3,62,562" Grid.Row="1" TextAlignment="Center"></TextBlock>
+        
+        <!--Users ListBox-->
         <ListView Grid.Column="0" Margin="0,23,0,47" Grid.Row="1" BorderBrush="Black" Background="Gray" ItemsSource="{Binding ActiveUsers}">
             <ListBox.ItemTemplate>
                 <DataTemplate>

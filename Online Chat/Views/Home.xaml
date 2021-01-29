@@ -8,11 +8,11 @@
         Height="449" Width="567" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" MouseDown="Window_MouseDown">
     <Grid Background="#FF575757">
         <Grid.RowDefinitions>
-            <RowDefinition Height="107*"/>
-            <RowDefinition Height="343*"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Border Background="#FF212020" Margin="0,0,0,74.5">
+        <!--Black Border-->
+        <Border Background="#FF212020" Margin="0,0,0,417">
             <Button Margin="521,0,0,0" RenderTransformOrigin="1.185,0.522" BorderBrush="Transparent" Cursor="Hand" Click="Exit" Template="{StaticResource CustomizedButton}">
                 <Image Source="/Images/Exit.png" Height="26" Width="30"></Image>
                 <Button.Style>
@@ -28,16 +28,16 @@
             </Button>
         </Border>
 
-        <TextBlock Text="Socket Chat" Margin="210,4,240,82.5" FontSize="15" Foreground="White" TextAlignment="Center"></TextBlock>
-        <Button Margin="190,143.5,226,117" Content="Connect" FontSize="15" Foreground="White" Command="{Binding _connect}" Grid.Row="1"></Button>
-        <Button Margin="190,238.5,226,21" Content="Host" FontSize="15" Foreground="White" Command="{Binding _host}" Grid.Row="1"></Button>
-        <TextBlock Text="IP Address" Margin="211,101,239,328" FontSize="14" Foreground="White" TextAlignment="Center" Grid.RowSpan="2"></TextBlock>
-        <TextBox Margin="190,23.5,226,294" TextAlignment="Center" FontSize="13" Text="{Binding IP, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"></TextBox>
-        <TextBlock Text="Port" Margin="238,54.5,273,268" FontSize="14" Foreground="White" TextAlignment="Center" Grid.Row="1"></TextBlock>
-        <TextBox Margin="190,82.5,226,235" TextAlignment="Center" FontSize="13" Text="{Binding Port, UpdateSourceTrigger=LostFocus}" Grid.Row="1"></TextBox>
-        <TextBlock Text="{Binding Status}" Foreground="Silver" TextAlignment="Center" Margin="214,115.5,255,206" Grid.Row="1"></TextBlock>
-        <TextBlock Text="Name" Margin="230,43,261,43.5" FontSize="14" Foreground="White" TextAlignment="Center"></TextBlock>
-        <TextBox Margin="190,71,226,10.5" TextAlignment="Center" FontSize="13" Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        <TextBlock Text="Socket Chat" Margin="210,4,240,424" FontSize="15" Foreground="White" TextAlignment="Center"></TextBlock>
+        <Button Margin="190,250,226,117" Content="Connect" FontSize="15" Foreground="White" Command="{Binding _connect}"/>
+        <Button Margin="190,346,226,21" Content="Host" FontSize="15" Foreground="White" Command="{Binding _host}"/>
+        <TextBlock Text="IP Address" Margin="211,101,239,328" FontSize="14" Foreground="White" TextAlignment="Center"/>
+        <TextBox Margin="190,130,226,293" TextAlignment="Center" FontSize="13" Text="{Binding IP, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Text="Port" Margin="238,162,273,267" FontSize="14" Foreground="White" TextAlignment="Center"/>
+        <TextBox Margin="190,190,226,235" TextAlignment="Center" FontSize="13" Text="{Binding Port, UpdateSourceTrigger=LostFocus}"/>
+        <TextBlock Text="{Binding Status}" Foreground="Silver" TextAlignment="Center" Margin="214,222,255,205"/>
+        <TextBlock Text="Name" Margin="230,43,261,385" FontSize="14" Foreground="White" TextAlignment="Center"></TextBlock>
+        <TextBox Margin="190,71,226,352" TextAlignment="Center" FontSize="13" Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
 
     </Grid>
 </Window>
