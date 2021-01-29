@@ -103,7 +103,8 @@ namespace Online_Chat.ViewModels
                     _isconnecting = false;
                     return;
                 }
-                CreateUser(false);
+               if(_user.Name == null)
+                    CreateUser(false);
                 await Task.Run(SendUser);
                 OnSuccessfulConnect?.Invoke(this, new ConnectEventArgs { ChatVM = await ConstructChatAsync()});
             }

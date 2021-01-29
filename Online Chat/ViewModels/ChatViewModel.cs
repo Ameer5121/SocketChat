@@ -28,12 +28,15 @@ namespace Online_Chat.ViewModels
         private string _message;
         private INetworkService _networkservice;
         private SynchronizationContext location = SynchronizationContext.Current;
+        private string _internalIP;
+        private string _externalIP;
         public ChatViewModel(TcpClient client, User user, INetworkService networkService)
         {
             _currentuser = user;
             _client = client;
             _messages = new ObservableCollection<Message>();
             _networkservice = networkService;
+            _internalIP = InternalIP.GetInternallIP();
             Task.Run(ReadData);
         }
 
@@ -55,7 +58,13 @@ namespace Online_Chat.ViewModels
             set => SetPropertyValue(ref _message, value);
          }
 
-         public ICommand Send => new RelayCommand(SendMessage, CanSend);
+        public User CurrentUser 
+        {
+            get => _currentuser;
+        }
+        public string InternalIP => _internalIP;
+
+        public ICommand Send => new RelayCommand(SendMessage, CanSend);
          
 
         private bool CanSend()
