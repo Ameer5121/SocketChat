@@ -34,22 +34,22 @@
             </Button>
         </Border>
 
-        <!--Chat TextBox-->
-        <TextBox Background="#FF424040" Margin="8,533,0,0"  FontSize="20" BorderBrush="Transparent" Grid.Column="1" Grid.Row="1" 
+        
+        <TextBox Background="DimGray" Margin="0,513,8,20"  FontSize="15" BorderBrush="Transparent" Grid.Column="1" Grid.Row="1" Foreground="Silver" 
                  Text="{Binding Message, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  MaxLines="500"
-                 >
+                 TextAlignment="Left"
+                 VerticalContentAlignment="Center">
             <TextBox.InputBindings>
                 <KeyBinding Command="{Binding Send}" Key="Enter" />
             </TextBox.InputBindings>
         </TextBox>
 
 
-
         <TextBlock Text="Message History" Foreground="White" Grid.Column="1" Margin="232,3,268,554" Grid.Row="1"></TextBlock>
 
         <!--Messages ListBox-->
-        <ListBox Background="Gray" Margin="8,23,0,47" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Messages}"
+        <ListView Background="#FF575757" Margin="8,23,0,72" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Messages}"
                  Scroll:ScrollBehavior.ScrollOnNewItem="True">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -65,16 +65,18 @@
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
-        </ListBox>
+        </ListView>
 
         <TextBlock Text="Users:" Foreground="White" Margin="49,3,62,562" Grid.Row="1" TextAlignment="Center"></TextBlock>
 
         <!--Users ListBox-->
-        <ListView Grid.Column="0" Margin="0,23,0,155" Grid.Row="1" BorderBrush="Black" Background="Gray" ItemsSource="{Binding ActiveUsers}">
+        <ListView Grid.Column="0" Grid.Row="1" BorderBrush="Transparent" ItemsSource="{Binding ActiveUsers}" 
+                      Height="{Binding RelativeSource={RelativeSource FindAncestor, 
+                         AncestorType={x:Type Border}},Path=Height}" Margin="0,23,0,160" Background="#FF4D4D4D">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
-                        <TextBlock FontSize="15" Foreground="Green" Text="{Binding Name}"></TextBlock>
+                        <TextBlock FontSize="15" Foreground="White" Text="{Binding Name}"></TextBlock>
                         <TextBlock Text=""></TextBlock>
                     </StackPanel>
                 </DataTemplate>

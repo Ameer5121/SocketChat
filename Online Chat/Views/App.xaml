@@ -12,6 +12,7 @@
             <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality" />
         </Style>
         
+        <!--Button Template-->
         <Style TargetType="Button" x:Key="{x:Type Button}">
             <Setter Property="Background" Value="#FF433F3F"></Setter> 
             <Setter Property="Template">
@@ -35,6 +36,35 @@
                 <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"></ContentPresenter>
             </Border>
         </ControlTemplate>
+
+
+        <!--TextBox Template-->
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="#FF424040"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Border Background="{TemplateBinding Background}" CornerRadius="15">
+                            <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!--ListView Template-->
+        <Style TargetType="ListView">
+            <Setter Property="Background" Value="#FF4D4D4D"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                            <ItemsPresenter></ItemsPresenter>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
     </Application.Resources>
 </Application>

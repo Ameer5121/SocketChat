@@ -32,12 +32,12 @@
         <Button Margin="190,250,226,117" Content="Connect" FontSize="15" Foreground="White" Command="{Binding _connect}"/>
         <Button Margin="190,346,226,21" Content="Host" FontSize="15" Foreground="White" Command="{Binding _host}"/>
         <TextBlock Text="IP Address" Margin="211,101,239,328" FontSize="14" Foreground="White" TextAlignment="Center"/>
-        <TextBox Margin="190,130,226,293" TextAlignment="Center" FontSize="13" Text="{Binding IP, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Margin="190,130,226,292" TextAlignment="Center" Foreground="White" FontSize="13" Text="{Binding IP, UpdateSourceTrigger=PropertyChanged}"/>
         <TextBlock Text="Port" Margin="238,162,273,267" FontSize="14" Foreground="White" TextAlignment="Center"/>
-        <TextBox Margin="190,190,226,235" TextAlignment="Center" FontSize="13" Text="{Binding Port, UpdateSourceTrigger=LostFocus}"/>
+        <TextBox Margin="190,190,226,232" TextAlignment="Center" FontSize="13" Foreground="White" Text="{Binding Port, UpdateSourceTrigger=LostFocus}"/>
         <TextBlock Text="{Binding Status}" Foreground="Silver" TextAlignment="Center" Margin="214,222,255,205"/>
         <TextBlock Text="Name" Margin="230,43,261,385" FontSize="14" Foreground="White" TextAlignment="Center"></TextBlock>
-        <TextBox Margin="190,71,226,352" TextAlignment="Center" FontSize="13" Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        <TextBox Margin="190,64,226,359" TextAlignment="Center" FontSize="13" Foreground="White" Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" Height="27"></TextBox>
 
     </Grid>
 </Window>

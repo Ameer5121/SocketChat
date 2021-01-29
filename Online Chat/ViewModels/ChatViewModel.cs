@@ -29,7 +29,6 @@ namespace Online_Chat.ViewModels
         private INetworkService _networkservice;
         private SynchronizationContext location = SynchronizationContext.Current;
         private string _internalIP;
-        private string _externalIP;
         public ChatViewModel(TcpClient client, User user, INetworkService networkService)
         {
             _currentuser = user;
