@@ -4,67 +4,17 @@
              xmlns:local="clr-namespace:Online_Chat"
              xmlns:ViewModels="clr-namespace:Online_Chat.ViewModels"
              xmlns:Views="clr-namespace:Online_Chat.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              StartupUri="Home.xaml">
     <Application.Resources>
-      
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <materialDesign:CustomColorTheme BaseTheme="Dark" PrimaryColor="Aqua" SecondaryColor="DarkGreen" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="/Resources/ButtonStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
 
-                <Style TargetType="Image">
-            <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality" />
-        </Style>
-        
-        <!--Button Template-->
-        <Style TargetType="Button" x:Key="{x:Type Button}">
-            <Setter Property="Background" Value="#FF433F3F"></Setter> 
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" BorderBrush="Black" CornerRadius="20">
-                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"></ContentPresenter>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#FF474646"></Setter>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <ControlTemplate x:Key="CustomizedButton" TargetType="Button">
-            <Border Background="{TemplateBinding Background}" BorderBrush="Black">
-                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"></ContentPresenter>
-            </Border>
-        </ControlTemplate>
-
-
-        <!--TextBox Template-->
-        <Style TargetType="TextBox">
-            <Setter Property="Background" Value="#FF424040"></Setter>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <Border Background="{TemplateBinding Background}" CornerRadius="15">
-                            <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        
-        <!--ListView Template-->
-        <Style TargetType="ListView">
-            <Setter Property="Background" Value="#FF4D4D4D"></Setter>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <Border Background="{TemplateBinding Background}" CornerRadius="10">
-                            <ItemsPresenter></ItemsPresenter>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
+       
     </Application.Resources>
 </Application>

@@ -5,39 +5,89 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Online_Chat"
         mc:Ignorable="d"
-        Height="449" Width="567" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" MouseDown="Window_MouseDown">
-    <Grid Background="#FF575757">
+        Height="449" Width="567" WindowStyle="None" 
+        ResizeMode="NoResize" 
+        WindowStartupLocation="CenterScreen" 
+        MouseDown="Window_MouseDown"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignDarkBackground}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="{materialDesign:MaterialDesignFont}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
         <!--Black Border-->
         <Border Background="#FF212020" Margin="0,0,0,417">
-            <Button Margin="521,0,0,0" RenderTransformOrigin="1.185,0.522" BorderBrush="Transparent" Cursor="Hand" Click="Exit" Template="{StaticResource CustomizedButton}">
-                <Image Source="/Images/Exit.png" Height="26" Width="30"></Image>
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Setter Property="Background" Value="Transparent"></Setter>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="Red"></Setter>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
+            <Button Margin="521,-5,0,0" RenderTransformOrigin="1.185,0.522" BorderBrush="Transparent" Cursor="Hand" Click="Exit" Height="37" VerticalAlignment="Bottom">
             </Button>
         </Border>
 
-        <TextBlock Text="Socket Chat" Margin="210,4,240,424" FontSize="15" Foreground="White" TextAlignment="Center"></TextBlock>
-        <Button Margin="190,250,226,117" Content="Connect" FontSize="15" Foreground="White" Command="{Binding _connect}"/>
-        <Button Margin="190,346,226,21" Content="Host" FontSize="15" Foreground="White" Command="{Binding _host}"/>
-        <TextBlock Text="IP Address" Margin="211,101,239,328" FontSize="14" Foreground="White" TextAlignment="Center"/>
-        <TextBox Margin="190,130,226,292" TextAlignment="Center" Foreground="White" FontSize="13" Text="{Binding IP, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBlock Text="Port" Margin="238,162,273,267" FontSize="14" Foreground="White" TextAlignment="Center"/>
-        <TextBox Margin="190,190,226,232" TextAlignment="Center" FontSize="13" Foreground="White" Text="{Binding Port, UpdateSourceTrigger=LostFocus}"/>
-        <TextBlock Text="{Binding Status}" Foreground="Silver" TextAlignment="Center" Margin="214,222,255,205"/>
-        <TextBlock Text="Name" Margin="230,43,261,385" FontSize="14" Foreground="White" TextAlignment="Center"></TextBlock>
-        <TextBox Margin="190,64,226,359" TextAlignment="Center" FontSize="13" Foreground="White" Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" Height="27"></TextBox>
+
+        <TextBlock Text="Socket Chat" 
+                   Margin="210,4,240,424" 
+                   FontSize="15" Foreground="White" 
+                   TextAlignment="Center"></TextBlock>
+
+        <Button Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                Content="Connect" 
+                FontSize="25"
+                Background="#FF433F3F"
+                Foreground="White"
+                BorderBrush="#FF2C2B2B"
+                 Command="{Binding _connect}"
+                 Height="Auto" Margin="199,249,240,151"/>
+
+        <Button  Style="{StaticResource MaterialDesignRaisedDarkButton}"
+            Content="Host" 
+            FontSize="25"
+            Height="49"
+            Foreground="White"
+            Background="#FF433F3F"
+            BorderBrush="#FF2C2B2B" Command="{Binding _host}" Width="128" Margin="199,330,240,69"/>
+
+        <!--IP Address-->
+        <TextBlock Text="IP Address"
+                   Margin="211,101,239,328"
+                   FontSize="14" Foreground="White" 
+                   TextAlignment="Center"/>
+        <TextBox Margin="190,130,226,292" 
+                 TextAlignment="Center" 
+                 Foreground="White" FontSize="13"
+                 Text="{Binding IP, UpdateSourceTrigger=PropertyChanged}"
+                 CaretBrush="White"
+                  materialDesign:TextFieldAssist.UnderlineBrush="DarkGreen"/>
+        <!--Port-->
+        <TextBlock Text="Port" 
+                   Margin="238,162,273,267" 
+                   FontSize="14"
+                   Foreground="White" 
+                   TextAlignment="Center"/>
+        <TextBox Margin="190,190,226,232" 
+                 TextAlignment="Center" 
+                 FontSize="13" Foreground="White"
+                 Text="{Binding Port, UpdateSourceTrigger=LostFocus}"
+                 CaretBrush="White"
+                  materialDesign:TextFieldAssist.UnderlineBrush="DarkGreen"/>
+        <!--Name-->
+        <TextBlock Text="Name" 
+                   Margin="230,43,261,385" 
+                   FontSize="14" Foreground="White" 
+                   TextAlignment="Center"></TextBlock>
+        <TextBox Margin="190,64,226,353" 
+                 TextAlignment="Center"
+                 FontSize="13" Foreground="White"
+                 Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"
+                 CaretBrush="White"
+                  materialDesign:TextFieldAssist.UnderlineBrush="DarkGreen"/>
+
+
+        <TextBlock Text="{Binding Status}" Foreground="Silver" 
+                   TextAlignment="Center" 
+                   Margin="210,391,259,36"/>
 
     </Grid>
 </Window>
