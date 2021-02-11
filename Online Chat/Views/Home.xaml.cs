@@ -43,6 +43,8 @@ namespace Online_Chat.Views
         private void InitializeChatWindow(object sender, ConnectEventArgs e)
         {
             MainChat chat = new MainChat(e.ChatVM);
+            (DataContext as HomeViewModel).Alert -= MessageRequest;
+            (DataContext as HomeViewModel).OnSuccessfulConnect -= InitializeChatWindow;
             this.Close();
         }
 
