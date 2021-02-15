@@ -6,8 +6,14 @@
         xmlns:local="clr-namespace:Online_Chat.Views"
         xmlns:Scroll="clr-namespace:Online_Chat.Helper"
         mc:Ignorable="d"
-        Height="620" Width="734" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" MouseDown="Window_MouseDown">
-    <Grid Background="#FF575757">
+        Height="620" Width="734" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" MouseDown="Window_MouseDown"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignDarkBackground}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="{materialDesign:MaterialDesignFont}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"/>
             <RowDefinition Height="29*"/>
@@ -23,57 +29,72 @@
             </Button>
         </Border>
 
-        
-        <TextBox Background="DimGray" Margin="0,513,8,20"  FontSize="15" BorderBrush="Transparent" Grid.Column="1" Grid.Row="1" Foreground="Silver" 
-                 Text="{Binding Message, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 MaxLines="500"
-                 TextAlignment="Left"
-                 VerticalContentAlignment="Center">
-            <TextBox.InputBindings>
-                <KeyBinding Command="{Binding Send}" Key="Enter" />
-            </TextBox.InputBindings>
-        </TextBox>
-
-
-        <TextBlock Text="Message History" Foreground="White" Grid.Column="1" Margin="232,3,268,554" Grid.Row="1"></TextBlock>
+        <TextBlock Text="Message History" Foreground="White" Grid.Column="1" Margin="232,3,242,554" Grid.Row="1"></TextBlock>
 
         <!--Messages ListBox-->
-        <ListView Background="#FF575757" Margin="8,23,0,72" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Messages}"
-                 Scroll:ScrollBehavior.ScrollOnNewItem="True">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
-                        <TextBlock FontSize="15" Foreground="LightCyan" TextWrapping="Wrap">
-                            <TextBlock.Text>
-                                <MultiBinding StringFormat="{}{0}: " Mode="OneWay">
-                                    <Binding Path="Sender" />
-                                </MultiBinding>
-                            </TextBlock.Text>
+        <materialDesign:Card UniformCornerRadius="5" Grid.Column="1" Margin="0,33,0,0" Grid.Row="1">
+            <ListView Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Messages}"
+                 Scroll:ScrollBehavior.ScrollOnNewItem="True" Margin="0,0,0,54">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock FontSize="15" Foreground="LightCyan" TextWrapping="Wrap">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0}: " Mode="OneWay">
+                                        <Binding Path="Sender" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
                             <Run Text="{Binding Content,Mode=OneWay}" Foreground="Silver"></Run>
-                        </TextBlock>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListView>
+                            </TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel VerticalAlignment="Bottom"/>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+            </ListView>
+        </materialDesign:Card>
+
+        <materialDesign:Card 
+            UniformCornerRadius="5"
+            Grid.Row="1" 
+            Grid.Column="1" 
+            Margin="10,528,10,10">
+            <TextBox VerticalAlignment="Center"
+                     FontSize="15" 
+                     Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}" 
+                     Height="40"
+                     VerticalContentAlignment="Center"
+                     CaretBrush="White"
+                     materialDesign:TextFieldAssist.UnderlineBrush="AliceBlue" Margin="0,0,0,2">
+                <TextBox.InputBindings>
+                    <KeyBinding Command="{Binding Send}" Key="Enter" />
+                </TextBox.InputBindings>
+            </TextBox>
+        </materialDesign:Card>
 
         <TextBlock Text="Users:" Foreground="White" Margin="49,3,62,562" Grid.Row="1" TextAlignment="Center"></TextBlock>
 
-        <!--Users ListBox-->
-        <ListView Grid.Column="0" Grid.Row="1" BorderBrush="Transparent" ItemsSource="{Binding ActiveUsers}" 
+        <materialDesign:Card UniformCornerRadius="5" Margin="0,33,10,96" Grid.Row="1">
+            <!--Users ListBox-->
+            <ListView Grid.Column="0" Grid.Row="1" BorderBrush="Transparent" ItemsSource="{Binding ActiveUsers}" 
                       Height="{Binding RelativeSource={RelativeSource FindAncestor, 
-                         AncestorType={x:Type Border}},Path=Height}" Margin="0,23,0,160" Background="#FF4D4D4D">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
-                        <TextBlock FontSize="15" Foreground="White" Text="{Binding Name}"></TextBlock>
-                        <TextBlock Text=""></TextBlock>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListView>
+                         AncestorType={x:Type Border}},Path=Height}" Background="Transparent">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock FontSize="15" Foreground="White" Text="{Binding Name}"></TextBlock>
+                            <TextBlock Text=""></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListView>
+        </materialDesign:Card>
 
         <!--IP Information-->
-        <TextBlock Margin="4,425,5,137" Grid.Row="1" Foreground="Silver" FontSize="11" TextAlignment="Center">
+        <TextBlock Margin="2,490,7,72" Grid.Row="1" Foreground="Silver" FontSize="11" TextAlignment="Center">
             <TextBlock.Style>
                 <Style TargetType="TextBlock">
                     <Style.Triggers>
@@ -84,7 +105,7 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <TextBlock x:Name="InternalIPTextBlock" Margin="4,466,5,96" Grid.Row="1" Foreground="Silver" FontSize="11" TextAlignment="Left">
+        <TextBlock x:Name="InternalIPTextBlock" Margin="1,521,8,41" Grid.Row="1" Foreground="Silver" FontSize="11" TextAlignment="Left">
             <TextBlock.Style>
                 <Style TargetType="TextBlock">
                     <Style.Triggers>
