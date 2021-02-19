@@ -6,9 +6,9 @@ This application works using a user-hosted server along with Protobuf's library 
 * MultiThreading through **System.Threading**
 * Socket Programming through **System.Net.Sockets**
 
-# Framework
+# Framework:
 * Made in WPF
      * MVVM Design Pattern
  
- # Third-Party Libraries
+ # Third-Party Libraries:
  * Protobuf.Net
